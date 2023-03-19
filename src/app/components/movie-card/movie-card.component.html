@@ -1,0 +1,23 @@
+<a class="card" [title]="card.title" [routerLink]="['/movie/', card.id]" *ngIf="card">
+    <img
+        *ngIf="card.poster_path"
+        loading="lazy"
+        decoding="async"
+        class="card__poster"
+        [src]="card.poster_path | imagePath"
+        [srcset]="(card.poster_path | imagePath) + ' 1x, ' + (card.poster_path | imagePath: true) + ' 2x'"
+        [alt]="card.title">
+
+    <span class="card__rating">
+        <span class="rating__circle" [attr.style]="'--tmbd-rating-value: ' + card.vote_average"></span>
+    </span>
+
+    <span class="card__content">
+        <h2 class="card__title">{{ card.title }}</h2>
+        <time
+            class="card__date"
+            [attr.datetime]="card.release_date | date:'y-MM-dd'">
+            {{ card.release_date | date:'dd MMM y' }}
+        </time>
+    </span>
+</a>

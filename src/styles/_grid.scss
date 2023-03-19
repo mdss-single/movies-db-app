@@ -1,0 +1,36 @@
+@use 'media' as *;
+@use 'variables' as *;
+
+.container {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+
+    @include tablet-small {
+        max-width: $bp576;
+    }
+
+    @include tablet {
+        max-width: $bp768;
+    }
+
+    @include tablet-big {
+        max-width: $bp992;
+    }
+
+    @include desktop {
+        max-width: $bp1200;
+    }
+}
+
+.grid {
+    display: flex;
+
+    &--scroller {
+        & > * {
+            flex-shrink: 0;
+        }
+    }
+}

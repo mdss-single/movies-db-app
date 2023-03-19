@@ -1,0 +1,31 @@
+<div>
+    %hero place%
+</div>
+
+<ng-container *ngIf="popularMovies$ as popularList; else loadingState">
+    <h2>Popular</h2>
+    <tmbd-scroller>
+        <div class="grid grid--scroller">
+            <tmbd-movie-card
+                *ngFor="let popular of popularList | async"
+                [card]="popular">
+            </tmbd-movie-card>
+        </div>
+    </tmbd-scroller>
+</ng-container>
+
+<ng-container *ngIf="topRatedMovies$ as topRatedList; else loadingState">
+    <h2>UnPopular</h2>
+    <tmbd-scroller>
+        <div class="grid grid--scroller">
+            <tmbd-movie-card
+                *ngFor="let top of topRatedList | async"
+                [card]="top">
+            </tmbd-movie-card>
+        </div>
+    </tmbd-scroller>
+</ng-container>
+
+<ng-template #loadingState>
+    Loading ...
+</ng-template>

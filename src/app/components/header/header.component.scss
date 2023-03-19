@@ -1,0 +1,31 @@
+.header {
+    background-color: rgb(var(--tmdbDarkBlue));
+    padding: 10px 0;
+
+    &__main {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 20px;
+    }
+}
+
+.logo {
+    animation: logo-animation 30s linear infinite;
+}
+
+.nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    &__item {
+        color: rgb(var(--lightGrey));
+    }
+}
+
+@keyframes logo-animation {
+    to {
+        filter: hue-rotate(360deg);
+    }
+}
