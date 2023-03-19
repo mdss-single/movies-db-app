@@ -1,5 +1,4 @@
-@use 'media' as *;
-@use 'variables' as *;
+@use 'design' as *;
 
 .container {
     width: 100%;
@@ -27,10 +26,22 @@
 
 .grid {
     display: flex;
+    gap: 15px;
+    padding: 10px 0;
 
     &--scroller {
         & > * {
             flex-shrink: 0;
         }
+    }
+}
+
+.section {
+    &:not(:first-child) {
+        margin-top: 30px;
+    }
+
+    &__title {
+        @include typo('title');
     }
 }

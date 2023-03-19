@@ -1,0 +1,16 @@
+.footer {
+    margin-top: 50px;
+    color: rgb(var(--white));
+    background-color: rgb(var(--tmdbDarkBlue));
+    padding: 10px 0;
+
+    &__container {
+        display: flex;
+        align-items: center;
+    }
+
+    &__logo {
+        margin-left: auto;
+        width: 100px;
+    }
+}

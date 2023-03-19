@@ -1,29 +1,52 @@
-<div>
-    %hero place%
-</div>
+<section class="hero">
+    <div class="hero__title">
+        <p>Добро пожаловать.</p>
+        <p>Миллионы фильмов, сериалов и людей. Исследуйте сейчас.</p>
+    </div>
 
-<ng-container *ngIf="popularMovies$ as popularList; else loadingState">
-    <h2>Popular</h2>
-    <tmbd-scroller>
-        <div class="grid grid--scroller">
-            <tmbd-movie-card
-                *ngFor="let popular of popularList | async"
-                [card]="popular">
-            </tmbd-movie-card>
-        </div>
-    </tmbd-scroller>
+    <input type="text" class="hero__search" #search placeholder="Search a movie or a tv show">
+</section>
+
+<ng-container *ngIf="popular$ as popularList; else loadingState">
+    <section class="section">
+        <h2 class="section__title">Popular</h2>
+        <tmbd-scroller>
+            <div class="grid grid--scroller">
+                <tmbd-movie-card
+                    *ngFor="let popular of popularList | async"
+                    [card]="popular">
+                </tmbd-movie-card>
+            </div>
+        </tmbd-scroller>
+    </section>
 </ng-container>
 
-<ng-container *ngIf="topRatedMovies$ as topRatedList; else loadingState">
-    <h2>UnPopular</h2>
-    <tmbd-scroller>
-        <div class="grid grid--scroller">
-            <tmbd-movie-card
-                *ngFor="let top of topRatedList | async"
-                [card]="top">
-            </tmbd-movie-card>
-        </div>
-    </tmbd-scroller>
+<ng-container *ngIf="rated$ as topRatedList; else loadingState">
+    <section class="section">
+        <h2 class="section__title">Top Rated</h2>
+        <tmbd-scroller>
+            <div class="grid grid--scroller">
+                <tmbd-movie-card
+                    *ngFor="let top of topRatedList | async"
+                    [card]="top">
+                </tmbd-movie-card>
+            </div>
+        </tmbd-scroller>
+    </section>
+</ng-container>
+
+<ng-container *ngIf="upcomingMovies$ as upcomingList; else loadingState">
+    <section class="section">
+        <h2 class="section__title">Upcoming</h2>
+        <tmbd-scroller>
+            <div class="grid grid--scroller">
+                <tmbd-movie-card
+                    *ngFor="let upcoming of upcomingList | async"
+                    [card]="upcoming">
+                </tmbd-movie-card>
+            </div>
+        </tmbd-scroller>
+    </section>
 </ng-container>
 
 <ng-template #loadingState>

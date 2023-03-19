@@ -1,7 +1,7 @@
 @mixin typo($type, $weight: 400) {
     @if ($type == "regular") {
         font-weight: 400;
-        font-size: 17px;
+        font-size: 16px;
     }
 
     @if ($type == "title") {
@@ -10,7 +10,7 @@
     }
 
     @if ($type == "h2") {
-        font-size: 3em;
+        font-size: 2em;
         font-weight: 700;
     }
 
@@ -20,44 +20,7 @@
     }
 
     @if ($type == "small") {
-        font-weight: 700;
-        font-size: 16px;
-        line-height: 14px;
-    }
-
-    @if ($type == "advertise") {
         font-weight: 500;
-        font-size: 48px;
-        line-height: 56px;
-    }
-
-    @if ($type == "button") {
-        font-weight: 500;
-        font-size: 18px;
-        line-height: 21px;
-    }
-
-    @if ($type == "title-item") {
-        font-weight: 600;
-        font-size: 18px;
-        line-height: 21px;
-    }
-
-    @if ($type == "title") {
-        font-weight: 400;
-        font-size: 24px;
-        line-height: 28px;
-    }
-
-    @if ($type == "title-page") {
-        font-weight: 400;
-        font-size: 32px;
-        line-height: 36px;
-    }
-
-    @if ($type == "promo") {
-        font-size: 14px;
-        font-weight: 500;
-        line-height: 16px;
+        font-size: 12px;
     }
 }

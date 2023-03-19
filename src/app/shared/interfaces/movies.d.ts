@@ -11,6 +11,7 @@ export interface Movie {
   belongs_to_collection?: null;
   budget?:                number;
   genres?:                Genre[];
+  genre_ids?:             number[];
   homepage?:              string;
   id?:                    number;
   imdb_id?:               string;
@@ -21,13 +22,17 @@ export interface Movie {
   poster_path?:           null;
   production_companies?:  ProductionCompany[];
   production_countries?:  ProductionCountry[];
+  origin_country?:        string[];
   release_date?:          Date;
+  first_air_date?:        Date;
   revenue?:               number;
   runtime?:               number;
   spoken_languages?:      SpokenLanguage[];
   status?:                string;
   tagline?:               string;
   title?:                 string;
+  name?:                  string;
+  original_name?:         string;
   video?:                 boolean;
   vote_average?:          number;
   vote_count?:            number;

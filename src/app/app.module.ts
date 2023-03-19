@@ -7,6 +7,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
 import { BaseUrlInterceptor } from './shared/interceptors/base-url.interceptor';
 import { MapResponseInterceptor } from './shared/interceptors/map-response.interceptor';
@@ -15,12 +16,13 @@ import { MapResponseInterceptor } from './shared/interceptors/map-response.inter
   declarations: [
     AppComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    HeaderComponent
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        HeaderComponent,
+        FooterComponent
+    ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
