@@ -1,1 +1,19 @@
-<p>person-card works!</p>
+<a class="person" [title]="person.name" [routerLink]="['/person/', person.id]" *ngIf="person">
+    <img
+        *ngIf="person.profile_path"
+        loading="lazy"
+        decoding="async"
+        class="person__poster"
+        [src]="person.profile_path | imagePath"
+        [srcset]="(person.profile_path | imagePath) + ' 1x, ' + (person.profile_path | imagePath: true) + ' 2x'"
+        [alt]="person.name">
+
+    <span class="person__content">
+        <h2 class="person__name">{{ person.name }}</h2>
+        <time
+            class="person__birthday"
+            [attr.datetime]="person.birthday | date:'y-MM-dd'">
+            {{ person.birthday | date:'dd MMM y' }}
+        </time>
+    </span>
+</a>

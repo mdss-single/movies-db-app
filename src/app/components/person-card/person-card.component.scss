@@ -1,0 +1,43 @@
+@use 'design' as *;
+
+.person {
+    display: grid;
+    grid-template-rows: 251px max-content;
+    border: 1px solid rgba(var(--lightGrey) / 1);
+    width: 172px;
+    height: 100%;
+    overflow: hidden;
+    background-color: rgb(var(--white));
+    box-shadow: 0 2px 8px rgb(var(--black) / 0.1);
+    border-radius: $border-radius;
+
+    &__poster,
+    &__content {
+        grid-column: 1 / -1;
+    }
+
+    &__poster {
+        grid-row: 1 / 2;
+    }
+
+    &__content {
+        grid-row: 2 / -1;
+        padding: 5px 10px 10px;
+    }
+
+    &__name {
+        @include typo('regular');
+
+        color: rgb(var(--black));
+        font-weight: 700;
+        line-height: 1;
+    }
+
+    &__birthday {
+        @include typo('small');
+
+        display: block;
+        color: rgb(var(--black));
+        margin-top: 5px;
+    }
+}

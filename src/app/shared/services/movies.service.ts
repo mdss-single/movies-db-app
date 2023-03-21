@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Movie } from '../interfaces/movies';
+import { SearchCard } from '../interfaces/search';
 import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MoviesService {
-  private _movies$ = new BehaviorSubject<Movie[]>([]);
+  private _searchResult$ = new BehaviorSubject<SearchCard[]>([]);
 
   private _popularMovies$ = new BehaviorSubject<Movie[]>([]);
   private _topRatedMovies$ = new BehaviorSubject<Movie[]>([]);
@@ -16,8 +17,8 @@ export class MoviesService {
   private _popularTv$ = new BehaviorSubject<Movie[]>([]);
   private _topRatedTv$ = new BehaviorSubject<Movie[]>([]);
 
-  get movies$(): Observable<Movie[]> {
-    return this._movies$.asObservable();
+  get searchResult$(): Observable<SearchCard[]> {
+    return this._searchResult$.asObservable();
   }
 
   get popularMovies$(): Observable<Movie[]> {
@@ -42,9 +43,9 @@ export class MoviesService {
 
   constructor(private apiService: ApiService) {}
 
-  loadMovies(params: string = '') {
-    this.apiService.getMovies$(params).subscribe((movies) => {
-      this._movies$.next(movies);
+  searchMovies(params: string = '') {
+    this.apiService.search$('search/multi?query=' + params).subscribe((result) => {
+      this._searchResult$.next(result);
     });
   }
 

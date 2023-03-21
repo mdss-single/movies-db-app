@@ -4,32 +4,68 @@
         <p>Миллионы фильмов, сериалов и людей. Исследуйте сейчас.</p>
     </div>
 
-    <input type="text" class="hero__search" #search placeholder="Search a movie or a tv show">
+    <input
+        type="text"
+        class="hero__search"
+        (input)="search($event)"
+        placeholder="Search a movie or a tv show">
 </section>
 
-<ng-container *ngIf="popular$ as popularList; else loadingState">
+<ng-container *ngIf="!isSearchHidden">
+    <ng-container *ngIf="searchResultMovies$ as searchResultMovies">
+        <section class="section" *ngIf="searchResultMovies.value.length">
+            <h2 class="section__title">Founded movies and tv</h2>
+            <tmbd-scroller>
+                <div class="grid grid--scroller">
+                    <tmbd-search-card
+                        *ngFor="let searchItem of searchResultMovies | async"
+                        [card]="searchItem"></tmbd-search-card>
+                </div>
+            </tmbd-scroller>
+        </section>
+    </ng-container>
+
+    <ng-container *ngIf="searchResultPersons$ as searchResultPersons">
+        <section class="section" *ngIf="searchResultPersons.value.length">
+            <h2 class="section__title">Founded persons</h2>
+            <tmbd-scroller>
+                <div class="grid grid--scroller">
+                    <tmbd-search-card
+                        *ngFor="let searchItem of searchResultPersons | async"
+                        [card]="searchItem"></tmbd-search-card>
+                </div>
+            </tmbd-scroller>
+        </section>
+    </ng-container>
+</ng-container>
+
+<ng-container *ngIf="popular$ as popularSectionList; else loadingState">
     <section class="section">
         <h2 class="section__title">Popular</h2>
         <tmbd-scroller>
             <div class="grid grid--scroller">
-                <tmbd-movie-card
-                    *ngFor="let popular of popularList | async"
-                    [card]="popular">
-                </tmbd-movie-card>
+                <ng-container *ngFor="let popularSection of popularSectionList | async">
+                    <tmbd-movie-card
+                        *ngFor="let popular of popularSection"
+                        [card]="popular">
+                    </tmbd-movie-card>
+                </ng-container>
             </div>
         </tmbd-scroller>
     </section>
 </ng-container>
 
-<ng-container *ngIf="rated$ as topRatedList; else loadingState">
+<ng-container *ngIf="rated$ as topRatedSectionList; else loadingState">
     <section class="section">
         <h2 class="section__title">Top Rated</h2>
         <tmbd-scroller>
             <div class="grid grid--scroller">
-                <tmbd-movie-card
-                    *ngFor="let top of topRatedList | async"
-                    [card]="top">
-                </tmbd-movie-card>
+                <ng-container *ngFor="let topRatedSection of topRatedSectionList | async">
+                    <tmbd-movie-card
+                        *ngFor="let top of topRatedSection"
+                        [card]="top">
+                    </tmbd-movie-card>
+                </ng-container>
             </div>
         </tmbd-scroller>
     </section>

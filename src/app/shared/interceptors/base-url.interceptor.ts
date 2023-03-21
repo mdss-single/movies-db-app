@@ -12,7 +12,9 @@ export class BaseUrlInterceptor implements HttpInterceptor {
   ) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    const newRequest = request.clone({ url: this.baseUrl + request.url + '?api_key=' + this.apiKey });
+    const newRequest = request.clone({ url: this.baseUrl + request.url, setParams: {
+      'api_key': this.apiKey
+    }});
 
     return next.handle(newRequest);
   }

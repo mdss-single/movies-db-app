@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, pluck } from 'rxjs';
 import { ImageConfig } from '../interfaces/image-config';
 import { Movie } from '../interfaces/movies';
-import { Search } from '../interfaces/search';
+import { SearchCard } from '../interfaces/search';
 import { BASE_URL } from '../tokens/base-url.token';
 
 @Injectable({
@@ -13,8 +13,8 @@ import { BASE_URL } from '../tokens/base-url.token';
 export class ApiService {
   constructor(private http: HttpClient, @Inject(BASE_URL) private baseUrl: string) {}
 
-  search$(params: string): Observable<Search> {
-    return this.http.get<Search>(params);
+  search$(params: string): Observable<SearchCard[]> {
+    return this.http.get<{ results: SearchCard[] }>(params).pipe(pluck('results'));
   }
 
   getMovies$(params: string): Observable<Movie[]> {
