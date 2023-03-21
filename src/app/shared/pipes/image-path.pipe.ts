@@ -12,9 +12,9 @@ export class ImagePathPipe implements PipeTransform {
 
   public transform(url: string, retina?: boolean): string {
     if (retina) {
-      return this.imageConfig.base_url + this.imageConfig.poster_sizes[3] + url;
+      return this.imageConfig.secure_base_url + this.imageConfig.poster_sizes[3] + url;
     }
 
-    return this.imageConfig.base_url + this.imageConfig.poster_sizes[1] + url;
+    return this.imageConfig.secure_base_url + this.imageConfig.poster_sizes[1] + url;
   }
 }
