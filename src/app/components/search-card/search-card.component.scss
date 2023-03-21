@@ -2,7 +2,7 @@
 
 .card {
     display: grid;
-    grid-template-rows: 236px 15px 25px max-content;
+    grid-template-rows: 235px 15px 25px max-content;
     border: 1px solid rgba(var(--lightGrey) / 1);
     width: 172px;
     height: 100%;
@@ -16,6 +16,7 @@
     }
 
     &__poster,
+    &__empty,
     &__rating,
     &__content {
         grid-column: 1 / -1;
@@ -23,11 +24,14 @@
 
     &__poster {
         grid-row: 1 / 3;
+        width: 100%;
         height: 100%;
         object-fit: cover;
     }
 
     &__empty {
+        grid-row: 1 / 3;
+        height: 100%;
         background-color: rgb(var(--lightGrey));
     }
 
