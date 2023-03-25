@@ -1,8 +1,14 @@
-import { CommonModule } from '@angular/common';
 import {
-  Component,
-  OnInit
-} from '@angular/core';
+  AsyncPipe,
+  NgForOf,
+  NgIf
+} from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import {
+  FormControl,
+  FormsModule,
+  ReactiveFormsModule
+} from '@angular/forms';
 import {
   BehaviorSubject,
   combineLatest,
@@ -10,67 +16,60 @@ import {
   distinctUntilChanged,
   filter,
   map,
-  Subject,
-  tap
+  Observable,
+  take,
 } from 'rxjs';
 
 import { MovieCardComponent } from '../../components/movie-card/movie-card.component';
 import { PersonCardComponent } from '../../components/person-card/person-card.component';
 import { ScrollerComponent } from '../../components/scroller/scroller.component';
 import { SearchCardComponent } from '../../components/search-card/search-card.component';
+import { ApiRequest } from '../../shared/enums/api-request';
 import { SearchMediaType } from '../../shared/enums/search';
-import { SearchCard } from '../../shared/interfaces/search';
-import { MoviesService } from '../../shared/services/movies.service';
+import { MovieDTO } from '../../shared/interfaces/movies';
+import { SearchCardDTO } from '../../shared/interfaces/search';
+import { ApiService } from '../../shared/services/api.service';
 
 @Component({
   selector: 'tmbd-entrance',
   standalone: true,
-  imports: [CommonModule, ScrollerComponent, MovieCardComponent, PersonCardComponent, SearchCardComponent],
+  imports: [ScrollerComponent, MovieCardComponent, PersonCardComponent, SearchCardComponent, FormsModule, ReactiveFormsModule, AsyncPipe, NgIf, NgForOf],
   templateUrl: './entrance.component.html',
   styleUrls: ['./entrance.component.scss']
 })
 export class EntranceComponent implements OnInit {
-  private readonly popularMovies$ = this.moviesService.popularMovies$;
-  private readonly topRatedMovies$ = this.moviesService.topRatedMovies$;
-  private readonly popularTv$ = this.moviesService.popularTv$;
-  private readonly topRatedTv$ = this.moviesService.topRatedTv$;
+  private readonly popularMovies$: Observable<MovieDTO[]> = this.apiService.getMovies$(ApiRequest.MoviePopular);
+  private readonly topRatedMovies$: Observable<MovieDTO[]> = this.apiService.getMovies$(ApiRequest.MovieTopRated);
+  private readonly popularTv$: Observable<MovieDTO[]> = this.apiService.getMovies$(ApiRequest.TvPopular);
+  private readonly topRatedTv$: Observable<MovieDTO[]> = this.apiService.getMovies$(ApiRequest.TvTopRated);
 
-  private searchInputValue$ = new Subject<string>();
-
-  public searchResultMovies$ = new BehaviorSubject<SearchCard[]>([]);
-  public searchResultPersons$ = new BehaviorSubject<SearchCard[]>([]);
-
+  public readonly upcomingMovies$: Observable<MovieDTO[]> = this.apiService.getMovies$(ApiRequest.MovieUpcoming);
   public readonly popular$ = combineLatest([this.popularMovies$, this.popularTv$]);
   public readonly rated$ = combineLatest([this.topRatedMovies$, this.topRatedTv$]);
-  public readonly upcomingMovies$ = this.moviesService.upcomingMovies$;
 
+  public searchResult$ = new BehaviorSubject<SearchCardDTO[]>([]);
+  public searchResultMovies$ = new BehaviorSubject<SearchCardDTO[]>([]);
+  public searchResultPersons$ = new BehaviorSubject<SearchCardDTO[]>([]);
   public isSearchHidden = true;
+  public searchInput = new FormControl('');
 
-  constructor(
-    private readonly moviesService: MoviesService,
-  ) {}
+  constructor(private apiService: ApiService) {}
 
   public ngOnInit(): void {
-    this.moviesService.loadPopularMovies();
-    this.moviesService.loadTopRatedMovies();
-    this.moviesService.loadUpcomingMovies();
-
-    this.moviesService.loadPopularTv();
-    this.moviesService.loadTopRatedTv();
-
-    this.searchInputValue$.pipe(
+    this.searchInput.valueChanges.pipe(
       debounceTime(200),
-      tap(value => {
-        this.isSearchHidden = value.length < 3;
-      }),
+      filter(Boolean),
       filter(value => value.length > 2),
       distinctUntilChanged(),
     ).subscribe(str => {
-      this.moviesService.searchMovies(str);
+      this.isSearchHidden = str.length < 3;
+      this.apiService.search$(ApiRequest.Search + str).pipe(
+        take(1),
+      ).subscribe(value => this.searchResult$.next(value));
     });
 
     // search movies
-    this.moviesService.searchResult$.pipe(
+    this.searchResult$.pipe(
       map(movies => movies.filter(movie => {
         return movie.media_type === SearchMediaType.Movie || movie.media_type === SearchMediaType.Tv;
       }))
@@ -79,15 +78,10 @@ export class EntranceComponent implements OnInit {
     });
 
     // search persons
-    this.moviesService.searchResult$.pipe(
+    this.searchResult$.pipe(
       map(movies => movies.filter(movie => movie.media_type === SearchMediaType.Person))
     ).subscribe(value => {
       this.searchResultPersons$.next(value);
     });
-  }
-
-  public search(event: Event): void {
-    const elem = event.target as HTMLInputElement;
-    this.searchInputValue$.next(elem.value);
   }
 }

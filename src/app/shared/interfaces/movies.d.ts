@@ -1,11 +1,11 @@
-export interface Movies {
+export interface MoviesDTO {
   page: number;
-  results: Movie[];
+  results: MovieDTO[];
   total_results: number,
   total_pages: number
 }
 
-export interface Movie {
+export interface MovieDTO {
   adult?:                 boolean;
   backdrop_path?:         string;
   belongs_to_collection?: null;
@@ -36,6 +36,13 @@ export interface Movie {
   video?:                 boolean;
   vote_average?:          number;
   vote_count?:            number;
+}
+
+export interface MovieShortCard {
+  title: string;
+  poster: string;
+  vote: number;
+  date: Date;
 }
 
 export interface Genre {

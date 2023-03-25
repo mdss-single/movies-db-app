@@ -2,9 +2,9 @@ import {
   SearchMediaType,
   SearchOriginalLanguage
 } from '../enums/search';
-import { Movie } from './movies';
+import { MovieDTO } from './movies';
 
-export interface SearchCard {
+export interface SearchCardDTO {
   poster_path?:       null | string;
   popularity?:        number;
   id?:                number;
@@ -25,5 +25,5 @@ export interface SearchCard {
   title?:             string;
   video?:             boolean;
   profile_path?:      null | string;
-  known_for?:         Movie[];
+  known_for?:         MovieDTO[];
 }
