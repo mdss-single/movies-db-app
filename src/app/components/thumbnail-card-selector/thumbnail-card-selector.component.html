@@ -1,17 +1,17 @@
 <ng-container *ngIf="card">
-    <tmbd-person-card
-        *ngIf="card.type === mediaType.Person; else movieCard"
-        [link]="['person', card.id]"
-        [person]="{
-            name: card.title,
-            poster: card.poster
-        }">
-    </tmbd-person-card>
+    <tmbd-movie-card
+        *ngIf="isMovieCard; else personCard"
+        [card]="card"
+        [link]="[isMovieCard ? 'movie' : 'tv', card.id]">
+    </tmbd-movie-card>
 
-    <ng-template #movieCard>
-        <tmbd-movie-card
-            [card]="card"
-            [link]="[isMovieCard ? 'movie' : 'tv', card.id]">
-        </tmbd-movie-card>
+    <ng-template #personCard>
+        <tmbd-person-card
+            [link]="['person', card.id]"
+            [person]="{
+                name: card.title,
+                poster: card.poster
+            }">
+        </tmbd-person-card>
     </ng-template>
 </ng-container>
