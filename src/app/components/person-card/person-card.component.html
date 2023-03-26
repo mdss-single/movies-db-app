@@ -10,5 +10,9 @@
 
     <span class="person__content">
         <h2 class="person__name">{{ person.name }}</h2>
+
+        <span *ngIf="person.role" class="person__role">
+            {{ person.role }}
+        </span>
     </span>
 </a>
