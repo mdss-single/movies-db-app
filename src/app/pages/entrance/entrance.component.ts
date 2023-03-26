@@ -17,6 +17,7 @@ import {
   filter,
   map,
   Observable,
+  switchMap,
   take,
   tap
 } from 'rxjs';
@@ -49,6 +50,8 @@ import { ApiService } from '../../shared/services/api.service';
   styleUrls: ['./entrance.component.scss']
 })
 export class EntranceComponent implements OnInit {
+  private readonly minSearchSymbol = 3;
+
   private readonly popularMovies$: Observable<MovieShortCard[]> = this.apiService.getMovies$(ApiRequestType.MoviePopular);
   private readonly topRatedMovies$: Observable<MovieShortCard[]> = this.apiService.getMovies$(ApiRequestType.MovieTopRated);
   private readonly popularTv$: Observable<MovieShortCard[]> = this.apiService.getMovies$(ApiRequestType.TvPopular);
@@ -69,18 +72,15 @@ export class EntranceComponent implements OnInit {
     this.searchInput.valueChanges.pipe(
       debounceTime(200),
       filter(Boolean),
-      tap(value => {
-        if (value.length < 2) {
+      tap(searchString => {
+        if (searchString.length < this.minSearchSymbol) {
           this.searchResult$.next([]);
         }
       }),
-      filter(value => value.length > 2),
-      distinctUntilChanged(),
-    ).subscribe(str => {
-      this.apiService.search$(ApiRequestType.Search + str).pipe(
-        take(1),
-      ).subscribe(value => this.searchResult$.next(value));
-    });
+      filter(searchString => searchString.length > this.minSearchSymbol),
+      switchMap(searchString => this.apiService.search$(ApiRequestType.Search + searchString)),
+      tap(searchResult => this.searchResult$.next(searchResult))
+    ).subscribe();
 
     // search movies
     this.searchResult$.pipe(

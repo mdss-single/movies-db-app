@@ -22,14 +22,14 @@ import { PersonCardComponent } from '../person-card/person-card.component';
   ]
 })
 export class ThumbnailCardSelectorComponent implements OnInit {
-  public mediaType = SearchMediaType;
-  public isMovieCard = false;
+  public isPersonCard = false;
+  public cardType = SearchMediaType;
 
   @Input() public card?: SearchCard;
 
   public ngOnInit(): void {
-    if (this.card?.type === SearchMediaType.Movie) {
-      this.isMovieCard = true;
+    if (this.card?.type === SearchMediaType.Person) {
+      this.isPersonCard = true;
     }
   }
 }
