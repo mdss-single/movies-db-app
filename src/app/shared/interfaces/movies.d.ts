@@ -39,6 +39,8 @@ export interface MovieDTO {
 }
 
 export interface MovieShortCard {
+  id: string;
+  type: string;
   title: string;
   poster: string;
   vote: number;

@@ -24,11 +24,11 @@ import {
 import { MovieCardComponent } from '../../components/movie-card/movie-card.component';
 import { PersonCardComponent } from '../../components/person-card/person-card.component';
 import { ScrollerComponent } from '../../components/scroller/scroller.component';
-import { SearchCardComponent } from '../../components/search-card/search-card.component';
-import { ApiRequest } from '../../shared/enums/api-request';
+import { ThumbnailCardSelectorComponent } from '../../components/thumbnail-card-selector/thumbnail-card-selector.component';
+import { ApiRequestType } from '../../shared/enums/api-request';
 import { SearchMediaType } from '../../shared/enums/search';
-import { MovieDTO } from '../../shared/interfaces/movies';
-import { SearchCardDTO } from '../../shared/interfaces/search';
+import { MovieShortCard } from '../../shared/interfaces/movies';
+import { SearchCard } from '../../shared/interfaces/search';
 import { ApiService } from '../../shared/services/api.service';
 
 @Component({
@@ -38,30 +38,30 @@ import { ApiService } from '../../shared/services/api.service';
     ScrollerComponent,
     MovieCardComponent,
     PersonCardComponent,
-    SearchCardComponent,
     FormsModule,
     ReactiveFormsModule,
     AsyncPipe,
     NgIf,
     NgForOf,
+    ThumbnailCardSelectorComponent
   ],
   templateUrl: './entrance.component.html',
   styleUrls: ['./entrance.component.scss']
 })
 export class EntranceComponent implements OnInit {
-  private readonly popularMovies$: Observable<MovieDTO[]> = this.apiService.getMovies$(ApiRequest.MoviePopular);
-  private readonly topRatedMovies$: Observable<MovieDTO[]> = this.apiService.getMovies$(ApiRequest.MovieTopRated);
-  private readonly popularTv$: Observable<MovieDTO[]> = this.apiService.getMovies$(ApiRequest.TvPopular);
-  private readonly topRatedTv$: Observable<MovieDTO[]> = this.apiService.getMovies$(ApiRequest.TvTopRated);
+  private readonly popularMovies$: Observable<MovieShortCard[]> = this.apiService.getMovies$(ApiRequestType.MoviePopular);
+  private readonly topRatedMovies$: Observable<MovieShortCard[]> = this.apiService.getMovies$(ApiRequestType.MovieTopRated);
+  private readonly popularTv$: Observable<MovieShortCard[]> = this.apiService.getMovies$(ApiRequestType.TvPopular);
+  private readonly topRatedTv$: Observable<MovieShortCard[]> = this.apiService.getMovies$(ApiRequestType.TvTopRated);
 
-  public readonly upcomingMovies$: Observable<MovieDTO[]> = this.apiService.getMovies$(ApiRequest.MovieUpcoming);
+  public readonly upcomingMovies$: Observable<MovieShortCard[]> = this.apiService.getMovies$(ApiRequestType.MovieUpcoming);
   public readonly popular$ = combineLatest([this.popularMovies$, this.popularTv$]);
   public readonly rated$ = combineLatest([this.topRatedMovies$, this.topRatedTv$]);
 
   public searchInput = new FormControl('');
-  public searchResult$ = new BehaviorSubject<SearchCardDTO[]>([]);
-  public searchResultMovies$ = new BehaviorSubject<SearchCardDTO[]>([]);
-  public searchResultPersons$ = new BehaviorSubject<SearchCardDTO[]>([]);
+  public searchResult$ = new BehaviorSubject<SearchCard[]>([]);
+  public searchResultMovies$ = new BehaviorSubject<SearchCard[]>([]);
+  public searchResultPersons$ = new BehaviorSubject<SearchCard[]>([]);
 
   constructor(private apiService: ApiService) {}
 
@@ -77,7 +77,7 @@ export class EntranceComponent implements OnInit {
       filter(value => value.length > 2),
       distinctUntilChanged(),
     ).subscribe(str => {
-      this.apiService.search$(ApiRequest.Search + str).pipe(
+      this.apiService.search$(ApiRequestType.Search + str).pipe(
         take(1),
       ).subscribe(value => this.searchResult$.next(value));
     });
@@ -85,7 +85,7 @@ export class EntranceComponent implements OnInit {
     // search movies
     this.searchResult$.pipe(
       map(movies => movies.filter(movie => {
-        return movie.media_type === SearchMediaType.Movie || movie.media_type === SearchMediaType.Tv;
+        return movie.type === SearchMediaType.Movie || movie.type === SearchMediaType.Tv;
       }))
     ).subscribe(value => {
       this.searchResultMovies$.next(value);
@@ -93,7 +93,7 @@ export class EntranceComponent implements OnInit {
 
     // search persons
     this.searchResult$.pipe(
-      map(movies => movies.filter(movie => movie.media_type === SearchMediaType.Person))
+      map(movies => movies.filter(movie => movie.type === SearchMediaType.Person))
     ).subscribe(value => {
       this.searchResultPersons$.next(value);
     });

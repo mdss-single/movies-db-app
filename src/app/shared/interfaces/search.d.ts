@@ -27,3 +27,12 @@ export interface SearchCardDTO {
   profile_path?:      null | string;
   known_for?:         MovieDTO[];
 }
+
+export interface SearchCard {
+  id: string;
+  title: string;
+  poster: string;
+  type: string;
+  rating?: number;
+  date?: Date;
+}

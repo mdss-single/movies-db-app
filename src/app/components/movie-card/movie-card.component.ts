@@ -5,9 +5,15 @@ import {
 } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { MovieDTO } from '../../shared/interfaces/movies';
 import { ImagePathPipe } from '../../shared/pipes/image-path.pipe';
 import { RatingPipe } from '../../shared/pipes/rating.pipe';
+
+type MovieCard = {
+  title: string;
+  poster: string;
+  rating?: number;
+  date?: Date | string;
+}
 
 @Component({
     selector: 'tmbd-movie-card',
@@ -24,5 +30,6 @@ import { RatingPipe } from '../../shared/pipes/rating.pipe';
     styleUrls: ['./movie-card.component.scss']
 })
 export class MovieCardComponent {
-  @Input('card') public card?: MovieDTO;
+  @Input() public card?: MovieCard;
+  @Input() public link?: string[];
 }

@@ -16,9 +16,9 @@
     <h2 class="section__title">Founded movies and tv</h2>
     <tmbd-scroller>
         <div class="grid grid--scroller">
-            <tmbd-search-card
+            <tmbd-thumbnail-card-selector
                 *ngFor="let searchItem of searchResultMovies$ | async"
-                [card]="searchItem"></tmbd-search-card>
+                [card]="searchItem"></tmbd-thumbnail-card-selector>
         </div>
     </tmbd-scroller>
 </section>
@@ -27,9 +27,9 @@
     <h2 class="section__title">Founded persons</h2>
     <tmbd-scroller>
         <div class="grid grid--scroller">
-            <tmbd-search-card
+            <tmbd-thumbnail-card-selector
                 *ngFor="let searchItem of searchResultPersons$ | async"
-                [card]="searchItem"></tmbd-search-card>
+                [card]="searchItem"></tmbd-thumbnail-card-selector>
         </div>
     </tmbd-scroller>
 </section>
@@ -41,7 +41,8 @@
             <ng-container *ngFor="let popularSection of popularSectionList">
                 <tmbd-movie-card
                     *ngFor="let popular of popularSection"
-                    [card]="popular">
+                    [card]="popular"
+                    [link]="[popular.type, popular.id]">
                 </tmbd-movie-card>
             </ng-container>
         </div>
@@ -55,7 +56,8 @@
             <ng-container *ngFor="let topRatedSection of topRatedSectionList">
                 <tmbd-movie-card
                     *ngFor="let top of topRatedSection"
-                    [card]="top">
+                    [card]="top"
+                    [link]="[top.type, top.id]">
                 </tmbd-movie-card>
             </ng-container>
         </div>
@@ -68,7 +70,8 @@
         <div class="grid grid--scroller">
             <tmbd-movie-card
                 *ngFor="let upcoming of upcomingList"
-                [card]="upcoming">
+                [card]="upcoming"
+                [link]="[upcoming.type, upcoming.id]">
             </tmbd-movie-card>
         </div>
     </tmbd-scroller>

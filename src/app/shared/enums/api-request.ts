@@ -1,4 +1,4 @@
-export enum ApiRequest {
+export enum ApiRequestType {
   MoviePopular = 'movie/popular',
   MovieTopRated = 'movie/top_rated',
   MovieUpcoming = 'movie/upcoming',
