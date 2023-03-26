@@ -6,7 +6,7 @@
             decoding="async"
             class="card__poster"
             [src]="card.poster_path | imagePath"
-            [srcset]="(card.poster_path | imagePath) + ' 1x, ' + (card.poster_path | imagePath: true) + ' 2x'"
+            [srcset]="card.poster_path | imagePath: true"
             [alt]="card.title">
 
         <span class="card__rating" [attr.style]="'--tmbd-rating-value: ' + (card.vote_average | rating)">

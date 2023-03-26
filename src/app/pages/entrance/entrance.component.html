@@ -12,33 +12,27 @@
         placeholder="Search a movie or a tv show">
 </section>
 
-<ng-container *ngIf="!isSearchHidden">
-    <ng-container *ngIf="searchResultMovies$ as searchResultMovies">
-        <section class="section" *ngIf="searchResultMovies.value.length">
-            <h2 class="section__title">Founded movies and tv</h2>
-            <tmbd-scroller>
-                <div class="grid grid--scroller">
-                    <tmbd-search-card
-                        *ngFor="let searchItem of searchResultMovies | async"
-                        [card]="searchItem"></tmbd-search-card>
-                </div>
-            </tmbd-scroller>
-        </section>
-    </ng-container>
+<section class="section" *ngIf="searchResultMovies$.value.length">
+    <h2 class="section__title">Founded movies and tv</h2>
+    <tmbd-scroller>
+        <div class="grid grid--scroller">
+            <tmbd-search-card
+                *ngFor="let searchItem of searchResultMovies$ | async"
+                [card]="searchItem"></tmbd-search-card>
+        </div>
+    </tmbd-scroller>
+</section>
 
-    <ng-container *ngIf="searchResultPersons$ as searchResultPersons">
-        <section class="section" *ngIf="searchResultPersons.value.length">
-            <h2 class="section__title">Founded persons</h2>
-            <tmbd-scroller>
-                <div class="grid grid--scroller">
-                    <tmbd-search-card
-                        *ngFor="let searchItem of searchResultPersons | async"
-                        [card]="searchItem"></tmbd-search-card>
-                </div>
-            </tmbd-scroller>
-        </section>
-    </ng-container>
-</ng-container>
+<section class="section" *ngIf="searchResultPersons$.value.length">
+    <h2 class="section__title">Founded persons</h2>
+    <tmbd-scroller>
+        <div class="grid grid--scroller">
+            <tmbd-search-card
+                *ngFor="let searchItem of searchResultPersons$ | async"
+                [card]="searchItem"></tmbd-search-card>
+        </div>
+    </tmbd-scroller>
+</section>
 
 <section class="section" *ngIf="(popular$ | async) as popularSectionList; else loadingState">
     <h2 class="section__title">Popular</h2>

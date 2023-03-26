@@ -18,6 +18,7 @@ import {
   map,
   Observable,
   take,
+  tap
 } from 'rxjs';
 
 import { MovieCardComponent } from '../../components/movie-card/movie-card.component';
@@ -33,7 +34,17 @@ import { ApiService } from '../../shared/services/api.service';
 @Component({
   selector: 'tmbd-entrance',
   standalone: true,
-  imports: [ScrollerComponent, MovieCardComponent, PersonCardComponent, SearchCardComponent, FormsModule, ReactiveFormsModule, AsyncPipe, NgIf, NgForOf],
+  imports: [
+    ScrollerComponent,
+    MovieCardComponent,
+    PersonCardComponent,
+    SearchCardComponent,
+    FormsModule,
+    ReactiveFormsModule,
+    AsyncPipe,
+    NgIf,
+    NgForOf,
+  ],
   templateUrl: './entrance.component.html',
   styleUrls: ['./entrance.component.scss']
 })
@@ -47,11 +58,10 @@ export class EntranceComponent implements OnInit {
   public readonly popular$ = combineLatest([this.popularMovies$, this.popularTv$]);
   public readonly rated$ = combineLatest([this.topRatedMovies$, this.topRatedTv$]);
 
+  public searchInput = new FormControl('');
   public searchResult$ = new BehaviorSubject<SearchCardDTO[]>([]);
   public searchResultMovies$ = new BehaviorSubject<SearchCardDTO[]>([]);
   public searchResultPersons$ = new BehaviorSubject<SearchCardDTO[]>([]);
-  public isSearchHidden = true;
-  public searchInput = new FormControl('');
 
   constructor(private apiService: ApiService) {}
 
@@ -59,10 +69,14 @@ export class EntranceComponent implements OnInit {
     this.searchInput.valueChanges.pipe(
       debounceTime(200),
       filter(Boolean),
+      tap(value => {
+        if (value.length < 2) {
+          this.searchResult$.next([]);
+        }
+      }),
       filter(value => value.length > 2),
       distinctUntilChanged(),
     ).subscribe(str => {
-      this.isSearchHidden = str.length < 3;
       this.apiService.search$(ApiRequest.Search + str).pipe(
         take(1),
       ).subscribe(value => this.searchResult$.next(value));
