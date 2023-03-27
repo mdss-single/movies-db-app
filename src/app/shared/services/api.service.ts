@@ -40,7 +40,7 @@ export class ApiService {
         type: result.title ? 'movie' : 'tv',
         title: result.title || result.name,
         poster: result.poster_path,
-        vote: result.vote_average,
+        rating: result.vote_average,
         date: result.release_date || result.first_air_date,
       }))),
     );

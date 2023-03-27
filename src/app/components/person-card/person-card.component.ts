@@ -7,6 +7,8 @@ import { RouterLink } from '@angular/router';
 import { ImagePathPipe } from '../../shared/pipes/image-path.pipe';
 
 type PersonCard = {
+  id: string;
+  type: string;
   name: string;
   poster: string;
   role?: string;
@@ -26,5 +28,4 @@ type PersonCard = {
 })
 export class PersonCardComponent {
   @Input() public person?: PersonCard;
-  @Input() public link?: string[];
 }

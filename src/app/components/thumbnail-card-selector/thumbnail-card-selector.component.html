@@ -1,8 +1,9 @@
 <ng-container *ngIf="card">
     <tmbd-person-card
         *ngIf="isPersonCard; else movieCard"
-        [link]="['person', card.id]"
         [person]="{
+            id: card.id,
+            type: card.type,
             name: card.title,
             poster: card.poster
         }">
@@ -10,8 +11,7 @@
 
     <ng-template #movieCard>
         <tmbd-movie-card
-            [card]="card"
-            [link]="[card.type === cardType.Movie ? 'movie' : 'tv', card.id]">
+            [card]="card">
         </tmbd-movie-card>
     </ng-template>
 </ng-container>

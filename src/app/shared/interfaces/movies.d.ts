@@ -43,7 +43,7 @@ export interface MovieShortCard {
   type: string;
   title: string;
   poster: string;
-  vote: number;
+  rating: number;
   date: Date;
 }
 

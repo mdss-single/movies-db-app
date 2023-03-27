@@ -1,4 +1,4 @@
-<a class="person" [title]="person.name" [routerLink]="link" *ngIf="person">
+<a class="person" [title]="person.name" [routerLink]="[person.type, person.id]" *ngIf="person">
     <img
         *ngIf="person.poster"
         loading="lazy"

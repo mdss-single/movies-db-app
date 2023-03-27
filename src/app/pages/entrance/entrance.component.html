@@ -41,8 +41,7 @@
             <ng-container *ngFor="let popularSection of popularSectionList">
                 <tmbd-movie-card
                     *ngFor="let popular of popularSection"
-                    [card]="popular"
-                    [link]="[popular.type, popular.id]">
+                    [card]="popular">
                 </tmbd-movie-card>
             </ng-container>
         </div>
@@ -56,8 +55,7 @@
             <ng-container *ngFor="let topRatedSection of topRatedSectionList">
                 <tmbd-movie-card
                     *ngFor="let top of topRatedSection"
-                    [card]="top"
-                    [link]="[top.type, top.id]">
+                    [card]="top">
                 </tmbd-movie-card>
             </ng-container>
         </div>
@@ -70,8 +68,7 @@
         <div class="grid grid--scroller">
             <tmbd-movie-card
                 *ngFor="let upcoming of upcomingList"
-                [card]="upcoming"
-                [link]="[upcoming.type, upcoming.id]">
+                [card]="upcoming">
             </tmbd-movie-card>
         </div>
     </tmbd-scroller>
