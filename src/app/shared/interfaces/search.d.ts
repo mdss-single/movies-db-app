@@ -32,7 +32,7 @@ export interface SearchCard {
   id: string;
   title: string;
   poster: string;
-  type: string;
+  type: SearchMediaType;
   rating?: number;
   date?: Date;
 }

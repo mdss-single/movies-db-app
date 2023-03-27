@@ -3,21 +3,18 @@ import {
   NgForOf,
   NgIf
 } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   FormControl,
   FormsModule,
   ReactiveFormsModule
 } from '@angular/forms';
 import {
-  BehaviorSubject,
   combineLatest,
   debounceTime,
   filter,
-  map,
   Observable,
   switchMap,
-  tap
 } from 'rxjs';
 
 import { MovieCardComponent } from '../../components/movie-card/movie-card.component';
@@ -27,7 +24,7 @@ import { ThumbnailCardSelectorComponent } from '../../components/thumbnail-card-
 import { ApiRequestType } from '../../shared/enums/api-request';
 import { SearchMediaType } from '../../shared/enums/search';
 import { MovieShortCard } from '../../shared/interfaces/movies';
-import { SearchCard } from '../../shared/interfaces/search';
+import { FilterPipe } from '../../shared/pipes/filter.pipe';
 import { ApiService } from '../../shared/services/api.service';
 
 @Component({
@@ -42,13 +39,15 @@ import { ApiService } from '../../shared/services/api.service';
     AsyncPipe,
     NgIf,
     NgForOf,
-    ThumbnailCardSelectorComponent
+    ThumbnailCardSelectorComponent,
+    FilterPipe
   ],
   templateUrl: './entrance.component.html',
   styleUrls: ['./entrance.component.scss']
 })
-export class EntranceComponent implements OnInit {
+export class EntranceComponent {
   private readonly minSearchSymbol = 3;
+  public readonly cardType = SearchMediaType;
 
   private readonly popularMovies$: Observable<MovieShortCard[]> = this.apiService.getMovies$(ApiRequestType.MoviePopular);
   private readonly topRatedMovies$: Observable<MovieShortCard[]> = this.apiService.getMovies$(ApiRequestType.MovieTopRated);
@@ -60,40 +59,12 @@ export class EntranceComponent implements OnInit {
   public readonly rated$ = combineLatest([this.topRatedMovies$, this.topRatedTv$]);
 
   public searchInput = new FormControl('');
-  public searchResult$ = new BehaviorSubject<SearchCard[]>([]);
-  public searchResultMovies$ = new BehaviorSubject<SearchCard[]>([]);
-  public searchResultPersons$ = new BehaviorSubject<SearchCard[]>([]);
+  public searchResult$ = this.searchInput.valueChanges.pipe(
+    debounceTime(200),
+    filter(Boolean),
+    filter(searchString => searchString.length > this.minSearchSymbol),
+    switchMap(searchString => this.apiService.search$(ApiRequestType.Search + searchString)),
+  );
 
   constructor(private apiService: ApiService) {}
-
-  public ngOnInit(): void {
-    this.searchInput.valueChanges.pipe(
-      debounceTime(200),
-      filter(Boolean),
-      tap(searchString => {
-        if (searchString.length < this.minSearchSymbol) {
-          this.searchResult$.next([]);
-        }
-      }),
-      filter(searchString => searchString.length > this.minSearchSymbol),
-      switchMap(searchString => this.apiService.search$(ApiRequestType.Search + searchString)),
-      tap(searchResult => this.searchResult$.next(searchResult))
-    ).subscribe();
-
-    // search movies
-    this.searchResult$.pipe(
-      map(movies => movies.filter(movie => {
-        return movie.type === SearchMediaType.Movie || movie.type === SearchMediaType.Tv;
-      }))
-    ).subscribe(value => {
-      this.searchResultMovies$.next(value);
-    });
-
-    // search persons
-    this.searchResult$.pipe(
-      map(movies => movies.filter(movie => movie.type === SearchMediaType.Person))
-    ).subscribe(value => {
-      this.searchResultPersons$.next(value);
-    });
-  }
 }

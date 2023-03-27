@@ -11,13 +11,18 @@ export class ImagePathPipe implements PipeTransform {
   constructor(private readonly imageConfigService: ImageConfigService) {}
 
   public transform(url: string, retina?: boolean): string {
-    const imageUrl = this.imageConfig.secure_base_url + this.imageConfig.poster_sizes[1] + url;
+    const [, smallSize, , bigSize] = this.imageConfig.poster_sizes;
+    const imageUrl = this.getImageUrl(smallSize, url);
 
     if (retina) {
-      const retinaImageUrl = this.imageConfig.secure_base_url + this.imageConfig.poster_sizes[3] + url;
-      return imageUrl + ' 1x, ' + retinaImageUrl + ' 2x';
+      const retinaImageUrl = this.getImageUrl(bigSize, url);
+      return `${imageUrl} 1x, ${retinaImageUrl} 2x`;
     }
 
     return imageUrl;
+  }
+
+  private getImageUrl(size: string, url: string): string {
+    return this.imageConfig.secure_base_url + size + url;
   }
 }

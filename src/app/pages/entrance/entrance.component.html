@@ -12,27 +12,29 @@
         placeholder="Search a movie or a tv show">
 </section>
 
-<section class="section" *ngIf="searchResultMovies$.value.length">
-    <h2 class="section__title">Founded movies and tv</h2>
-    <tmbd-scroller>
-        <div class="grid grid--scroller">
-            <tmbd-thumbnail-card-selector
-                *ngFor="let searchItem of searchResultMovies$ | async"
-                [card]="searchItem"></tmbd-thumbnail-card-selector>
-        </div>
-    </tmbd-scroller>
-</section>
+<ng-container *ngIf="(searchResult$ | async) as searchResult">
+    <section class="section" *ngIf="searchResult | filter: { field: 'type', negative: true, value: cardType.Person } as searchResultMovies">
+        <h2 class="section__title">Founded movies and tv</h2>
+        <tmbd-scroller>
+            <div class="grid grid--scroller">
+                <tmbd-thumbnail-card-selector
+                    *ngFor="let searchItem of searchResultMovies"
+                    [card]="searchItem"></tmbd-thumbnail-card-selector>
+            </div>
+        </tmbd-scroller>
+    </section>
 
-<section class="section" *ngIf="searchResultPersons$.value.length">
-    <h2 class="section__title">Founded persons</h2>
-    <tmbd-scroller>
-        <div class="grid grid--scroller">
-            <tmbd-thumbnail-card-selector
-                *ngFor="let searchItem of searchResultPersons$ | async"
-                [card]="searchItem"></tmbd-thumbnail-card-selector>
-        </div>
-    </tmbd-scroller>
-</section>
+    <section class="section" *ngIf="searchResult | filter: { field: 'type', value: cardType.Person } as searchResultPersons">
+        <h2 class="section__title">Founded persons</h2>
+        <tmbd-scroller>
+            <div class="grid grid--scroller">
+                <tmbd-thumbnail-card-selector
+                    *ngFor="let searchItem of searchResultPersons"
+                    [card]="searchItem"></tmbd-thumbnail-card-selector>
+            </div>
+        </tmbd-scroller>
+    </section>
+</ng-container>
 
 <section class="section" *ngIf="(popular$ | async) as popularSectionList; else loadingState">
     <h2 class="section__title">Popular</h2>

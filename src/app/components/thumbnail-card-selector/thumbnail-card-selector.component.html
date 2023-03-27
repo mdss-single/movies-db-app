@@ -1,6 +1,6 @@
 <ng-container *ngIf="card">
     <tmbd-person-card
-        *ngIf="isPersonCard; else movieCard"
+        *ngIf="card.type === cardType.Person; else movieCard"
         [person]="{
             id: card.id,
             type: card.type,

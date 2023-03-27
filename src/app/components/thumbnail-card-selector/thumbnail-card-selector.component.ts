@@ -1,9 +1,5 @@
 import { NgIf } from '@angular/common';
-import {
-  Component,
-  Input,
-  OnInit
-} from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SearchMediaType } from '../../shared/enums/search';
 import { SearchCard } from '../../shared/interfaces/search';
@@ -21,15 +17,8 @@ import { PersonCardComponent } from '../person-card/person-card.component';
     RouterLink
   ]
 })
-export class ThumbnailCardSelectorComponent implements OnInit {
-  public isPersonCard = false;
+export class ThumbnailCardSelectorComponent {
   public cardType = SearchMediaType;
 
   @Input() public card?: SearchCard;
-
-  public ngOnInit(): void {
-    if (this.card?.type === SearchMediaType.Person) {
-      this.isPersonCard = true;
-    }
-  }
 }
