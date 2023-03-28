@@ -18,7 +18,7 @@
         <tmbd-scroller>
             <div class="grid grid--scroller">
                 <tmbd-thumbnail-card-selector
-                    *ngFor="let searchItem of searchResultMovies"
+                    *ngFor="let searchItem of searchResultMovies; trackBy: trackById"
                     [card]="searchItem"></tmbd-thumbnail-card-selector>
             </div>
         </tmbd-scroller>
@@ -29,7 +29,7 @@
         <tmbd-scroller>
             <div class="grid grid--scroller">
                 <tmbd-thumbnail-card-selector
-                    *ngFor="let searchItem of searchResultPersons"
+                    *ngFor="let searchItem of searchResultPersons; trackBy: trackById"
                     [card]="searchItem"></tmbd-thumbnail-card-selector>
             </div>
         </tmbd-scroller>
@@ -42,7 +42,7 @@
         <div class="grid grid--scroller">
             <ng-container *ngFor="let popularSection of popularSectionList">
                 <tmbd-movie-card
-                    *ngFor="let popular of popularSection"
+                    *ngFor="let popular of popularSection; trackBy: trackById"
                     [card]="popular">
                 </tmbd-movie-card>
             </ng-container>
@@ -56,7 +56,7 @@
         <div class="grid grid--scroller">
             <ng-container *ngFor="let topRatedSection of topRatedSectionList">
                 <tmbd-movie-card
-                    *ngFor="let top of topRatedSection"
+                    *ngFor="let top of topRatedSection; trackBy: trackById"
                     [card]="top">
                 </tmbd-movie-card>
             </ng-container>
@@ -69,7 +69,7 @@
     <tmbd-scroller>
         <div class="grid grid--scroller">
             <tmbd-movie-card
-                *ngFor="let upcoming of upcomingList"
+                *ngFor="let upcoming of upcomingList; trackBy: trackById"
                 [card]="upcoming">
             </tmbd-movie-card>
         </div>

@@ -24,6 +24,7 @@ import { ThumbnailCardSelectorComponent } from '../../components/thumbnail-card-
 import { ApiRequestType } from '../../shared/enums/api-request';
 import { SearchMediaType } from '../../shared/enums/search';
 import { MovieShortCard } from '../../shared/interfaces/movies';
+import { SearchCard } from '../../shared/interfaces/search';
 import { FilterPipe } from '../../shared/pipes/filter.pipe';
 import { ApiService } from '../../shared/services/api.service';
 
@@ -67,4 +68,8 @@ export class EntranceComponent {
   );
 
   constructor(private apiService: ApiService) {}
+
+  public trackById(id: number, item: MovieShortCard | SearchCard): number {
+    return item.id;
+  }
 }
