@@ -39,7 +39,7 @@ export interface MovieDTO {
 }
 
 export interface MovieShortCard {
-  id: string;
+  id: number;
   type: string;
   title: string;
   poster: string;

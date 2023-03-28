@@ -7,7 +7,7 @@ import { RouterLink } from '@angular/router';
 import { ImagePathPipe } from '../../shared/pipes/image-path.pipe';
 
 type PersonCard = {
-  id: string;
+  id: number;
   type: string;
   name: string;
   poster: string;

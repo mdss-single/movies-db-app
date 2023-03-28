@@ -46,7 +46,7 @@ import { ApiService } from '../../shared/services/api.service';
   styleUrls: ['./entrance.component.scss']
 })
 export class EntranceComponent {
-  private readonly minSearchSymbol = 3;
+  private readonly minSearchSymbol = 2;
   public readonly cardType = SearchMediaType;
 
   private readonly popularMovies$: Observable<MovieShortCard[]> = this.apiService.getMovies$(ApiRequestType.MoviePopular);
@@ -62,8 +62,8 @@ export class EntranceComponent {
   public searchResult$ = this.searchInput.valueChanges.pipe(
     debounceTime(200),
     filter(Boolean),
-    filter(searchString => searchString.length > this.minSearchSymbol),
-    switchMap(searchString => this.apiService.search$(ApiRequestType.Search + searchString)),
+    filter((searchString) => searchString.length > this.minSearchSymbol),
+    switchMap((searchString) => this.apiService.search$(ApiRequestType.Search + searchString)),
   );
 
   constructor(private apiService: ApiService) {}

@@ -9,7 +9,7 @@ import { ImagePathPipe } from '../../shared/pipes/image-path.pipe';
 import { RatingPipe } from '../../shared/pipes/rating.pipe';
 
 type MovieCard = {
-  id: string;
+  id: number;
   title: string;
   type: string;
   poster: string;

@@ -24,6 +24,14 @@
         object-fit: cover;
     }
 
+    &__poster--empty {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: rgb(var(--darkerGrey));
+        background-color: rgb(var(--lightGrey));
+    }
+
     &__rating {
         @include typo('small');
 

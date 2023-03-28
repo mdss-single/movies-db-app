@@ -12,7 +12,7 @@ export interface SearchCardDTO {
   backdrop_path?:     null | string;
   vote_average?:      number;
   media_type?:        SearchMediaType;
-  first_air_date?:    string;
+  first_air_date?:    Date;
   origin_country?:    string[];
   genre_ids?:         number[];
   original_language?: SearchOriginalLanguage;
@@ -29,7 +29,7 @@ export interface SearchCardDTO {
 }
 
 export interface SearchCard {
-  id: string;
+  id: number;
   title: string;
   poster: string;
   type: SearchMediaType;

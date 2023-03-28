@@ -1,6 +1,6 @@
 <a class="card" [title]="card.title" [routerLink]="[card.type, card.id]" *ngIf="card">
     <img
-        *ngIf="card.poster"
+        *ngIf="card.poster; else emptyPoster"
         loading="lazy"
         decoding="async"
         class="card__poster"
@@ -20,4 +20,10 @@
             {{ card.date | date:'dd MMM y' }}
         </time>
     </span>
+
+    <ng-template #emptyPoster>
+        <div class="card__poster card__poster--empty">
+            {{ 'No photo' }}
+        </div>
+    </ng-template>
 </a>
