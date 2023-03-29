@@ -4,7 +4,7 @@ import {
   SearchCardDTO
 } from '../interfaces/search';
 
-export function personMapper(obj: SearchCardDTO): SearchCard {
+export function searchPersonMapper(obj: SearchCardDTO): SearchCard {
   return {
     id: obj.id ?? 0,
     title: obj.name ?? '',

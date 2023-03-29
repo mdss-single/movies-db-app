@@ -12,9 +12,11 @@ import {
 import {
   combineLatest,
   debounceTime,
+  distinctUntilChanged,
   filter,
+  map,
   Observable,
-  switchMap,
+  switchMap
 } from 'rxjs';
 
 import { MovieCardComponent } from '../../components/movie-card/movie-card.component';
@@ -48,7 +50,6 @@ import { ApiService } from '../../shared/services/api.service';
 })
 export class EntranceComponent {
   private readonly minSearchSymbol = 2;
-  public readonly cardType = SearchMediaType;
 
   private readonly popularMovies$: Observable<MovieShortCard[]> = this.apiService.getMovies$(ApiRequestType.MoviePopular);
   private readonly topRatedMovies$: Observable<MovieShortCard[]> = this.apiService.getMovies$(ApiRequestType.MovieTopRated);
@@ -59,11 +60,20 @@ export class EntranceComponent {
   public readonly popular$ = combineLatest([this.popularMovies$, this.popularTv$]);
   public readonly rated$ = combineLatest([this.topRatedMovies$, this.topRatedTv$]);
 
+  public readonly filterByPerson = (value: SearchCard) => value.type === SearchMediaType.Person;
+  public readonly filterByMovie = (value: SearchCard) => value.type !== SearchMediaType.Person;
+
   public searchInput = new FormControl('');
+  public isSearchHidden$ = this.searchInput.valueChanges.pipe(
+    filter(Boolean),
+    map(value => value.length >= this.minSearchSymbol),
+  );
+
   public searchResult$ = this.searchInput.valueChanges.pipe(
-    debounceTime(200),
     filter(Boolean),
     filter((searchString) => searchString.length > this.minSearchSymbol),
+    debounceTime(200),
+    distinctUntilChanged(),
     switchMap((searchString) => this.apiService.search$(ApiRequestType.Search + searchString)),
   );
 

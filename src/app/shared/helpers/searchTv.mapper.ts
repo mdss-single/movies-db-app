@@ -1,10 +1,10 @@
 import { SearchMediaType } from '../enums/search';
 import {
-  MovieDTO,
-  MovieShortCard
-} from '../interfaces/movies';
+  SearchCard,
+  SearchCardDTO
+} from '../interfaces/search';
 
-export function tvMapper(obj: MovieDTO): MovieShortCard {
+export function searchTvMapper(obj: SearchCardDTO): SearchCard {
   return {
     id: obj.id ?? 0,
     title: obj.name ?? '',

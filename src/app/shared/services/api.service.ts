@@ -7,8 +7,10 @@ import {
 import { SearchMediaType } from '../enums/search';
 import {
   movieMapper,
-  personMapper,
-  tvMapper
+  tvMapper,
+  searchMovieMapper,
+  searchPersonMapper,
+  searchTvMapper
 } from '../helpers';
 import { ImageConfig } from '../interfaces/image-config';
 import {
@@ -20,10 +22,16 @@ import {
   SearchCardDTO
 } from '../interfaces/search';
 
-const factory = {
-  [SearchMediaType.Movie]: movieMapper,
-  [SearchMediaType.Tv]: tvMapper,
-  [SearchMediaType.Person]: personMapper,
+function isPerson(person: SearchCardDTO): person is SearchCardDTO {
+  return (person as SearchCardDTO).media_type === SearchMediaType.Person;
+}
+
+function isMovie(movie: SearchCardDTO): movie is SearchCardDTO {
+  return (movie as SearchCardDTO).media_type === SearchMediaType.Movie;
+}
+
+function isTv(tv: SearchCardDTO): tv is SearchCardDTO {
+  return (tv as SearchCardDTO).media_type === SearchMediaType.Tv;
 }
 
 @Injectable({
@@ -36,10 +44,22 @@ export class ApiService {
   search$(params: string): Observable<SearchCard[]> {
     return this.http.get<{ results: SearchCardDTO[] }>(params).pipe(
       map((data) => {
-        return data.results.map((result) => {
-          // @ts-ignore
-          return factory[result.media_type](result);
-        });
+        return data.results
+          .map((result) => {
+            if (isPerson(result)) {
+              return searchPersonMapper(result);
+            }
+
+            if (isMovie(result)) {
+              return searchMovieMapper(result);
+            }
+
+            if (isTv(result)) {
+              return searchTvMapper(result);
+            }
+
+            return {} as SearchCard;
+          });
       }),
     );
   }
