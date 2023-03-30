@@ -22,16 +22,10 @@ import {
   SearchCardDTO
 } from '../interfaces/search';
 
-function isPerson(person: SearchCardDTO): person is SearchCardDTO {
-  return (person as SearchCardDTO).media_type === SearchMediaType.Person;
-}
-
-function isMovie(movie: SearchCardDTO): movie is SearchCardDTO {
-  return (movie as SearchCardDTO).media_type === SearchMediaType.Movie;
-}
-
-function isTv(tv: SearchCardDTO): tv is SearchCardDTO {
-  return (tv as SearchCardDTO).media_type === SearchMediaType.Tv;
+const searchCardMapperFactory: {[key in SearchMediaType]: (value: SearchCardDTO) => SearchCard } = {
+  [SearchMediaType.Movie]: searchMovieMapper,
+  [SearchMediaType.Tv]: searchTvMapper,
+  [SearchMediaType.Person]: searchPersonMapper,
 }
 
 @Injectable({
@@ -46,19 +40,11 @@ export class ApiService {
       map((data) => {
         return data.results
           .map((result) => {
-            if (isPerson(result)) {
-              return searchPersonMapper(result);
+            if (!result.media_type) {
+              return {} as SearchCard;
             }
 
-            if (isMovie(result)) {
-              return searchMovieMapper(result);
-            }
-
-            if (isTv(result)) {
-              return searchTvMapper(result);
-            }
-
-            return {} as SearchCard;
+            return searchCardMapperFactory[result.media_type](result);
           });
       }),
     );
