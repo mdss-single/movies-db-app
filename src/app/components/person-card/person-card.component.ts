@@ -8,7 +8,6 @@ import { ImagePathPipe } from '../../shared/pipes/image-path.pipe';
 
 type PersonCard = {
   id: number;
-  type: string;
   name: string;
   poster: string;
   role?: string;

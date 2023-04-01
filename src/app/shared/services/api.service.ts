@@ -10,10 +10,18 @@ import {
   tvMapper,
   searchMovieMapper,
   searchPersonMapper,
-  searchTvMapper
+  searchTvMapper,
+  movieDetailsMapper,
+  castMapper
 } from '../helpers';
+import {
+  CastCard,
+  CastDTO
+} from '../interfaces/cast';
 import { ImageConfig } from '../interfaces/image-config';
 import {
+  MovieDetails,
+  MovieDetailsOptions,
   MovieDTO,
   MovieShortCard
 } from '../interfaces/movies';
@@ -60,8 +68,38 @@ export class ApiService {
     );
   }
 
-  getTvShows$(params: string): Observable<MovieDTO[]> {
-    return this.http.get<{ results: MovieDTO[] }>(params).pipe(map(data => data.results));
+  getMovieDetails$(params: string): Observable<MovieDetails> {
+    return this.http.get<MovieDTO>(params).pipe(
+      map(data => {
+        return movieDetailsMapper(data);
+      }),
+    );
+  }
+
+  getMovieCast$(params: string, options?: MovieDetailsOptions): Observable<CastCard[]> {
+    return this.http.get<{ cast: CastDTO[] }>(params).pipe(
+      map(data => {
+        if (options?.partial) {
+          return data.cast.slice(0, 9).map((result) => {
+            return castMapper(result);
+          });
+        }
+
+        return data.cast.map((result) => {
+          return castMapper(result);
+        });
+      }),
+    );
+  }
+
+  getMovieCrew$(params: string): Observable<CastCard[]> {
+    return this.http.get<{ crew: CastDTO[] }>(params).pipe(
+      map(data => {
+        return data.crew.map((result) => {
+          return castMapper(result);
+        });
+      }),
+    );
   }
 
   getImageConfig$(params: string): Observable<ImageConfig> {
