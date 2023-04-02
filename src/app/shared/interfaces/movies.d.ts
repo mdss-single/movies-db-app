@@ -58,7 +58,7 @@ export interface MovieDetails {
 }
 
 export interface MovieDetailsOptions {
-  partial?: boolean;
+  topTen?: boolean;
 }
 
 export interface Genre {

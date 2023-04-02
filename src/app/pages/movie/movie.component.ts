@@ -62,8 +62,8 @@ export class MovieComponent implements OnInit {
     const requestType = this.isMovie ? ApiRequestType.MovieDetails : ApiRequestType.TvDetails;
 
     this.pageDetails$ = this.apiService.getMovieDetails$(requestType + this.movieId);
-    this.cast$ = this.apiService.getMovieCast$(requestType + this.movieId + '/credits', {
-      partial: true,
+    this.cast$ = this.apiService.getMovieCast$(requestType + this.movieId + ApiRequestType.Credits, {
+      topTen: true,
     });
   }
 }

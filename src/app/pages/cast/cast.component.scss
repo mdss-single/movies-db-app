@@ -1,0 +1,34 @@
+.movie-info {
+    background-color: rgb(var(--darkerGrey));
+    padding: 20px 0;
+
+    &__wrapper {
+        display: grid;
+        grid-template-areas: "pic title" "pic back";
+        grid-template-columns: max-content 1fr;
+        grid-column-gap: 20px;
+        grid-row-gap: 5px;
+    }
+
+    &__pic {
+        grid-area: pic;
+        width: 80px;
+    }
+
+    &__title {
+        grid-area: title;
+    }
+
+    &__back {
+        grid-area: back;
+    }
+}
+
+.cast {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    grid-gap: 50px;
+    margin-top: 50px;
+
+    &__section {}
+}

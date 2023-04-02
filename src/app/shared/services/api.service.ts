@@ -79,7 +79,7 @@ export class ApiService {
   getMovieCast$(params: string, options?: MovieDetailsOptions): Observable<CastCard[]> {
     return this.http.get<{ cast: CastDTO[] }>(params).pipe(
       map(data => {
-        if (options?.partial) {
+        if (options?.topTen) {
           return data.cast.slice(0, 9).map((result) => {
             return castMapper(result);
           });

@@ -7,4 +7,5 @@ export enum ApiRequestType {
   Search = 'search/multi?query=',
   MovieDetails = 'movie/',
   TvDetails = 'tv/',
+  Credits = '/credits',
 }
