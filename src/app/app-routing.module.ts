@@ -12,15 +12,15 @@ const routes: Routes = [
   },
   {
     path: 'tv/:id',
-    loadComponent: () => import('./pages/movie/movie.component').then(mod => mod.MovieComponent)
+    loadComponent: () => import('./pages/tv/tv.component').then(mod => mod.TvComponent)
   },
   {
     path: 'movie/:id/cast',
-    loadComponent: () => import('./pages/cast/cast.component').then(mod => mod.CastComponent)
+    loadComponent: () => import('./pages/movie-cast/movie-cast.component').then(mod => mod.MovieCastComponent)
   },
   {
     path: 'tv/:id/cast',
-    loadComponent: () => import('./pages/cast/cast.component').then(mod => mod.CastComponent)
+    loadComponent: () => import('./pages/tv-cast/tv-cast.component').then(mod => mod.TvCastComponent)
   },
   {
     path: '**',

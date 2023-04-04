@@ -1,0 +1,22 @@
+<div *ngIf="(pageDetails$ | async) as movieDetails" class="movie-info">
+    <div class="container movie-info__wrapper">
+        <img [src]="movieDetails.picture | imagePath" [alt]="movieDetails.title" class="movie-info__pic">
+
+        <h2 class="movie-info__title">{{ movieDetails.title }}</h2>
+        <a routerLink="../" class="movie-info__back">Back</a>
+    </div>
+</div>
+
+<div class="movie-cast">
+    <div class="movie-cast__section" *ngIf="(cast$ | async) as movieCastList">
+        <h3>Actors</h3>
+
+        <tmbd-cast-list [castList]="movieCastList"></tmbd-cast-list>
+    </div>
+
+    <div class="movie-cast__section" *ngIf="(crew$ | async) as movieCrewList">
+        <h3>Not Actors</h3>
+
+        <tmbd-cast-list [castList]="movieCrewList"></tmbd-cast-list>
+    </div>
+</div>

@@ -1,0 +1,24 @@
+.movie {
+    display: grid;
+    grid-template-areas: "picture general" "main main";
+    margin-top: 50px;
+
+    &__picture {
+        grid-area: picture;
+        width: 300px;
+    }
+
+    &__general {
+        grid-area: general;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    &__main {
+        grid-area: main;
+        display: grid;
+        grid-template-columns: 1fr 250px;
+        margin-top: 40px;
+    }
+}

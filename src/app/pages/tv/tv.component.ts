@@ -3,14 +3,14 @@ import { MovieTvSelectorComponent } from '../../components/movie-tv-selector/mov
 import { PageDetailsType } from '../../shared/enums/page-types';
 
 @Component({
-  selector: 'tmbd-movie',
+  selector: 'tmbd-tv',
   standalone: true,
-  templateUrl: './movie.component.html',
+  templateUrl: './tv.component.html',
   imports: [
     MovieTvSelectorComponent
   ],
-  styleUrls: ['./movie.component.scss']
+  styleUrls: ['./tv.component.scss']
 })
-export class MovieComponent {
+export class TvComponent {
   public pageType = PageDetailsType;
 }
