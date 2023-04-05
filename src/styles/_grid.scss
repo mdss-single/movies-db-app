@@ -26,10 +26,13 @@
 
 .grid {
     display: flex;
+    flex-wrap: wrap;
     gap: 15px;
     padding: 10px 0;
 
     &--scroller {
+        flex-wrap: nowrap;
+
         & > * {
             flex-shrink: 0;
         }

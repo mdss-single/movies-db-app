@@ -6,6 +6,26 @@ const routes: Routes = [
     path: '',
     loadComponent: () => import('./pages/entrance/entrance.component').then(mod => mod.EntranceComponent)
   },
+  {
+    path: 'movie/:id',
+    loadComponent: () => import('./pages/movie/movie.component').then(mod => mod.MovieComponent)
+  },
+  {
+    path: 'tv/:id',
+    loadComponent: () => import('./pages/tv/tv.component').then(mod => mod.TvComponent)
+  },
+  {
+    path: 'movie/:id/cast',
+    loadComponent: () => import('./pages/movie-cast/movie-cast.component').then(mod => mod.MovieCastComponent)
+  },
+  {
+    path: 'tv/:id/cast',
+    loadComponent: () => import('./pages/tv-cast/tv-cast.component').then(mod => mod.TvCastComponent)
+  },
+  {
+    path: '**',
+    loadComponent: () => import('./pages/not-found/not-found.component').then(mod => mod.NotFoundComponent)
+  },
 ];
 
 @NgModule({

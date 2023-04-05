@@ -1,0 +1,23 @@
+<tmbd-scroller *ngIf="insideScroller; else gridView">
+    <div class="grid grid--scroller">
+        <ng-container *ngTemplateOutlet="person"></ng-container>
+    </div>
+</tmbd-scroller>
+
+<ng-template #gridView>
+    <div class="grid">
+        <ng-container *ngTemplateOutlet="person"></ng-container>
+    </div>
+</ng-template>
+
+<ng-template #person>
+    <tmbd-person-card
+        *ngFor="let person of castList"
+        [person]="{
+        id: person.id,
+        name: person.name,
+        poster: person.poster,
+        role: person.role
+    }">
+    </tmbd-person-card>
+</ng-template>

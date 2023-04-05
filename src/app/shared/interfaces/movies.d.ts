@@ -47,6 +47,20 @@ export interface MovieShortCard {
   date: Date;
 }
 
+export interface MovieDetails {
+  id: number;
+  title: string;
+  description: string;
+  picture: string;
+  date: Date;
+  genres: Genre[];
+  rating: number;
+}
+
+export interface MovieDetailsOptions {
+  topTen?: boolean;
+}
+
 export interface Genre {
   id:   number;
   name: string;

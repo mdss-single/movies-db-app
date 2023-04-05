@@ -1,0 +1,12 @@
+<ng-container *ngIf="(pageDetails$ | async) as details">
+    <tmbd-movie-details [details]="details"></tmbd-movie-details>
+</ng-container>
+
+<div class="cast" *ngIf="(cast$ | async) as castList">
+    <h2>Main cast</h2>
+    <a routerLink="cast">See all</a>
+
+    <tmbd-cast-list
+        [castList]="castList"
+        [insideScroller]="true"></tmbd-cast-list>
+</div>

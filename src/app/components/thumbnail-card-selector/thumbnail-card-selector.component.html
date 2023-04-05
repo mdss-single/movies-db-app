@@ -3,7 +3,6 @@
         *ngIf="card.type === cardType.Person; else movieCard"
         [person]="{
             id: card.id,
-            type: card.type,
             name: card.title,
             poster: card.poster
         }">
