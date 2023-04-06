@@ -128,6 +128,15 @@ export class ApiService {
     );
   }
 
+  getPersonCast$(params: string): Observable<{ cast: CastCard[], crew: CastCard[] }> {
+    return this.http.get<{ cast: CastDTO[], crew: CastDTO[] }>(params).pipe(
+      map((data) => ({
+        cast: data.cast.map((castItem) => castMapper(castItem)),
+        crew: data.crew.map((castItem) => castMapper(castItem)),
+      })),
+    );
+  }
+
   getImageConfig$(params: string): Observable<ImageConfig> {
     return this.http.get<{ images: ImageConfig }>(params).pipe(map(data => data.images));
   }

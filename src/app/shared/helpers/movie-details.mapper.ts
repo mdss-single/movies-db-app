@@ -6,7 +6,7 @@ import {
 export function movieDetailsMapper(obj: MovieDTO): MovieDetails {
   return {
     id: obj.id ?? 0,
-    title: obj.original_title ?? '',
+    title: obj.title || obj.name || '',
     description: obj.overview ?? '',
     picture: obj.backdrop_path ?? '',
     date: obj.release_date ?? new Date(),

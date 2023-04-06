@@ -42,5 +42,27 @@
                 </tmbd-scroller>
             </div>
         </div>
+
+        <ng-container *ngIf="(personCast$ | async) as castGroup">
+            <div class="person__acting" *ngIf="castGroup.cast as castList">
+                <h3>Acting</h3>
+                <div *ngFor="let cast of castList" class="person__acting-row">
+                    <div>{{ cast.date | date: 'Y' }}</div>
+                    <div>
+                        <a [routerLink]="['/', cast.type, cast.id]">{{ cast.name }}</a> as {{ cast.role }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="person__acting" *ngIf="castGroup.crew as crewList">
+                <h3>Directing</h3>
+                <div *ngFor="let crew of crewList" class="person__acting-row">
+                    <div>{{ crew.date | date: 'Y' }}</div>
+                    <div>
+                        <a [routerLink]="['/', crew.type, crew.id]">{{ crew.name }}</a> as {{ crew.role }}
+                    </div>
+                </div>
+            </div>
+        </ng-container>
     </main>
 </div>
