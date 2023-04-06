@@ -40,20 +40,20 @@ import { MovieDetailsComponent } from '../movie-details/movie-details.component'
 export class MovieTvSelectorComponent {
   @Input() public pageType: 'movie' | 'tv' = 'movie';
 
-  public $movieId: Observable<string> = this.route.params.pipe(
+  private movieId$: Observable<string> = this.route.params.pipe(
     map(value => value['id']),
     filter(Boolean)
   );
 
-  public pageDetails$: Observable<MovieDetails> = this.$movieId.pipe(
-    switchMap(movieId => {
+  public pageDetails$: Observable<MovieDetails> = this.movieId$.pipe(
+    switchMap((movieId) => {
       const params = `${this.pageType}/` + movieId;
 
       return this.apiService.getMovieDetails$(params);
     }),
   );
 
-  public cast$: Observable<CastCard[]> = this.$movieId.pipe(
+  public cast$: Observable<CastCard[]> = this.movieId$.pipe(
     switchMap(movieId => {
       const params = `${this.pageType}/` + movieId + ApiRequestType.Credits;
 

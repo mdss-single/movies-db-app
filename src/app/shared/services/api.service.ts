@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
+  filter,
   map,
   Observable
 } from 'rxjs';
@@ -12,7 +13,8 @@ import {
   searchPersonMapper,
   searchTvMapper,
   movieDetailsMapper,
-  castMapper
+  castMapper,
+  personMapper
 } from '../helpers';
 import {
   CastCard,
@@ -26,8 +28,13 @@ import {
   MovieShortCard
 } from '../interfaces/movies';
 import {
+  PersonDetails,
+  PersonDTO
+} from '../interfaces/person';
+import {
   SearchCard,
-  SearchCardDTO
+  SearchCardDTO,
+  SearchPersonDTO
 } from '../interfaces/search';
 
 const searchCardMapperFactory: {[key in SearchMediaType]: (value: SearchCardDTO) => SearchCard } = {
@@ -98,6 +105,25 @@ export class ApiService {
         return data.crew.map((result) => {
           return castMapper(result);
         });
+      }),
+    );
+  }
+
+  getPersonDetails$(params: string): Observable<PersonDetails> {
+    return this.http.get<PersonDTO>(params).pipe(
+      map(data => personMapper(data))
+    );
+  }
+
+  getPersonKnowsFor$(params: string, id: number): Observable<SearchCard[]> {
+    return this.http.get<{ results: SearchPersonDTO[] }>(params).pipe(
+      map((data) => {
+        return data.results.find((person) => person.id === id);
+      }),
+      filter(Boolean),
+      map((person) => {
+        return person.known_for
+          .map((card) => card.title ? searchMovieMapper(card) : searchTvMapper(card));
       }),
     );
   }

@@ -1,4 +1,4 @@
-<a class="card" [title]="card.title" [routerLink]="[card.type, card.id]" *ngIf="card">
+<a class="card" [title]="card.title" [routerLink]="['/', card.type, card.id]" *ngIf="card">
     <img
         *ngIf="card.poster; else emptyPoster"
         loading="lazy"

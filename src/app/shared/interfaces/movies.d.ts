@@ -1,10 +1,3 @@
-export interface MoviesDTO {
-  page: number;
-  results: MovieDTO[];
-  total_results: number,
-  total_pages: number
-}
-
 export interface MovieDTO {
   adult?:                 boolean;
   backdrop_path?:         string;

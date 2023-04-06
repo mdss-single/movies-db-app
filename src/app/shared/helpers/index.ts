@@ -5,6 +5,7 @@ import { searchTvMapper } from './searchTv.mapper';
 import { searchMovieMapper } from './searchMovie.mapper';
 import { searchPersonMapper } from './searchPerson.mapper';
 import { castMapper } from './cast.mapper';
+import { personMapper } from './person.mapper';
 
 export {
   movieMapper,
@@ -14,4 +15,5 @@ export {
   searchMovieMapper,
   searchPersonMapper,
   castMapper,
+  personMapper,
 }

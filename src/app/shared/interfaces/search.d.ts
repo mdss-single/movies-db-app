@@ -36,3 +36,12 @@ export interface SearchCard {
   rating?: number;
   date?: Date;
 }
+
+export interface SearchPersonDTO {
+  id?:           number;
+  name:          string;
+  known_for:     SearchCardDTO[];
+  profile_path?: string | null;
+  adult?:        boolean;
+  popularity:    number;
+}

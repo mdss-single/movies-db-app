@@ -1,0 +1,46 @@
+<div class="person" *ngIf="(personDetails$ | async) as person">
+    <aside class="person__sidebar">
+        <img
+            [src]="person.photo | imagePath"
+            [srcset]="person.photo | imagePath: true"
+            [alt]="person.name"
+            class="person__photo">
+
+        <div class="person__section">
+            <p>Birthday</p>
+            {{ person.birthday | date:'dd MMM y' }}
+        </div>
+
+        <div class="person__section">
+            <p>Gender</p>
+            {{ person.gender }}
+        </div>
+
+        <div class="person__section">
+            <p>Place of birth</p>
+            {{ person.place_of_birth }}
+        </div>
+    </aside>
+
+    <main class="person__info">
+        <h3 class="person__name">{{ person.name }}</h3>
+
+        <div class="person__bio">
+            <div class="person__section">
+                <h4>Biography</h4>
+                <div>{{ person.biography }}</div>
+            </div>
+
+            <div class="person__section" *ngIf="(personKnownFor$ | async) as creditList">
+                <h4>Known for</h4>
+                <tmbd-scroller>
+                    <div class="grid grid--scroller">
+                        <tmbd-thumbnail-card-selector
+                            *ngFor="let credit of creditList"
+                            [card]="credit"></tmbd-thumbnail-card-selector>
+                    </div>
+                </tmbd-scroller>
+            </div>
+        </div>
+    </main>
+</div>
