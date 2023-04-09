@@ -1,3 +1,5 @@
+import { MediaType } from '../enums/media-types';
+
 export interface CastDTO {
   id?:               number;
   episode_count?:    number;
@@ -5,9 +7,9 @@ export interface CastDTO {
   original_name?:    string;
   genre_ids:         number[];
   name?:             string;
-  media_type?:       'movie' | 'tv';
+  media_type?:       MediaType;
   poster_path?:      null | string;
-  first_air_date?:   string;
+  first_air_date?:   Date;
   vote_average?:     number;
   vote_count?:       number;
   character?:        string;
@@ -26,8 +28,18 @@ export interface CastDTO {
 export interface CastCard {
   id:     number;
   name:   string;
-  date:   Date | string;
-  type:   'movie' | 'tv';
   poster: string;
+  date:   Date;
+  type:   MediaType;
   role:   string;
+}
+
+export interface CastAndCrewDTO {
+  cast: CastDTO[];
+  crew: CastDTO[];
+}
+
+export interface CastAndCrew {
+  cast: CastCard[];
+  crew: CastCard[];
 }

@@ -24,7 +24,7 @@ import { PersonCardComponent } from '../../components/person-card/person-card.co
 import { ScrollerComponent } from '../../components/scroller/scroller.component';
 import { ThumbnailCardSelectorComponent } from '../../components/thumbnail-card-selector/thumbnail-card-selector.component';
 import { ApiRequestType } from '../../shared/enums/api-request';
-import { SearchMediaType } from '../../shared/enums/search';
+import { MediaType } from '../../shared/enums/media-types';
 import { MovieShortCard } from '../../shared/interfaces/movies';
 import { SearchCard } from '../../shared/interfaces/search';
 import { FilterPipe } from '../../shared/pipes/filter.pipe';
@@ -60,8 +60,8 @@ export class EntranceComponent {
   public readonly popular$ = combineLatest([this.popularMovies$, this.popularTv$]);
   public readonly rated$ = combineLatest([this.topRatedMovies$, this.topRatedTv$]);
 
-  public readonly filterByPerson = (value: SearchCard) => value.type === SearchMediaType.Person;
-  public readonly filterByMovie = (value: SearchCard) => value.type !== SearchMediaType.Person;
+  public readonly filterByPerson = (value: SearchCard) => value.type === MediaType.Person;
+  public readonly filterByMovie = (value: SearchCard) => value.type !== MediaType.Person;
 
   public searchInput = new FormControl('');
   public isSearchHidden$ = this.searchInput.valueChanges.pipe(

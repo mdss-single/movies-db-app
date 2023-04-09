@@ -1,4 +1,4 @@
-import { SearchMediaType } from '../enums/search';
+import { MediaType } from '../enums/media-types';
 import {
   SearchCard,
   SearchCardDTO
@@ -9,6 +9,6 @@ export function searchPersonMapper(obj: SearchCardDTO): SearchCard {
     id: obj.id ?? 0,
     title: obj.name ?? '',
     poster: obj.profile_path ?? '',
-    type: SearchMediaType.Person,
+    type: MediaType.Person,
   }
 }

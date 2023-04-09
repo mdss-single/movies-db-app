@@ -1,7 +1,7 @@
 import { NgIf } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { SearchMediaType } from '../../shared/enums/search';
+import { MediaType } from '../../shared/enums/media-types';
 import { SearchCard } from '../../shared/interfaces/search';
 import { MovieCardComponent } from '../movie-card/movie-card.component';
 import { PersonCardComponent } from '../person-card/person-card.component';
@@ -18,7 +18,7 @@ import { PersonCardComponent } from '../person-card/person-card.component';
   ]
 })
 export class ThumbnailCardSelectorComponent {
-  public cardType = SearchMediaType;
+  public cardType = MediaType;
 
   @Input() public card?: SearchCard;
 }

@@ -1,42 +1,43 @@
-<div class="person" *ngIf="(personDetails$ | async) as person">
+<div class="person" *ngIf="(person$ | async) as details">
     <aside class="person__sidebar">
         <img
-            [src]="person.photo | imagePath"
-            [srcset]="person.photo | imagePath: true"
-            [alt]="person.name"
+            *ngIf="details.person.photo"
+            [src]="details.person.photo | imagePath"
+            [srcset]="details.person.photo | imagePath: true"
+            [alt]="details.person.name"
             class="person__photo">
 
-        <div class="person__section">
+        <div class="person__section" *ngIf="details.person.birthday">
             <p>Birthday</p>
-            {{ person.birthday | date:'dd MMM y' }}
+            {{ details.person.birthday | date:'dd MMM y' }}
         </div>
 
-        <div class="person__section">
+        <div class="person__section" *ngIf="details.person.gender">
             <p>Gender</p>
-            {{ person.gender }}
+            {{ details.person.gender }}
         </div>
 
-        <div class="person__section">
+        <div class="person__section" *ngIf="details.person.place_of_birth">
             <p>Place of birth</p>
-            {{ person.place_of_birth }}
+            {{ details.person.place_of_birth }}
         </div>
     </aside>
 
     <main class="person__info">
-        <h3 class="person__name">{{ person.name }}</h3>
+        <h3 class="person__name">{{ details.person.name }}</h3>
 
         <div class="person__bio">
-            <div class="person__section">
+            <div class="person__section" *ngIf="details.person.biography">
                 <h4>Biography</h4>
-                <div>{{ person.biography }}</div>
+                <div>{{ details.person.biography }}</div>
             </div>
 
-            <div class="person__section" *ngIf="(personKnownFor$ | async) as creditList">
+            <div class="person__section" *ngIf="details.cast.length">
                 <h4>Known for</h4>
                 <tmbd-scroller>
                     <div class="grid grid--scroller">
                         <tmbd-thumbnail-card-selector
-                            *ngFor="let credit of creditList"
+                            *ngFor="let credit of details.cast"
                             [card]="credit"></tmbd-thumbnail-card-selector>
                     </div>
                 </tmbd-scroller>
@@ -44,25 +45,24 @@
         </div>
 
         <ng-container *ngIf="(personCast$ | async) as castGroup">
-            <div class="person__acting" *ngIf="castGroup.cast as castList">
+            <div class="person__acting" *ngIf="castGroup.cast.length">
                 <h3>Acting</h3>
-                <div *ngFor="let cast of castList" class="person__acting-row">
+                <ng-container *ngTemplateOutlet="castSection; context: {castList: castGroup.cast}"></ng-container>
+            </div>
+
+            <div class="person__acting" *ngIf="castGroup.crew.length">
+                <h3>Directing</h3>
+                <ng-container *ngTemplateOutlet="castSection; context: {castList: castGroup.crew}"></ng-container>
+            </div>
+
+            <ng-template #castSection let-cast="castList">
+                <div *ngFor="let cast of cast" class="person__acting-row">
                     <div>{{ cast.date | date: 'Y' }}</div>
                     <div>
                         <a [routerLink]="['/', cast.type, cast.id]">{{ cast.name }}</a> as {{ cast.role }}
                     </div>
                 </div>
-            </div>
-
-            <div class="person__acting" *ngIf="castGroup.crew as crewList">
-                <h3>Directing</h3>
-                <div *ngFor="let crew of crewList" class="person__acting-row">
-                    <div>{{ crew.date | date: 'Y' }}</div>
-                    <div>
-                        <a [routerLink]="['/', crew.type, crew.id]">{{ crew.name }}</a> as {{ crew.role }}
-                    </div>
-                </div>
-            </div>
+            </ng-template>
         </ng-container>
     </main>
 </div>

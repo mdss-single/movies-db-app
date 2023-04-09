@@ -17,7 +17,7 @@ import {
   switchMap
 } from 'rxjs';
 import { ApiRequestType } from '../../shared/enums/api-request';
-import { CastCard } from '../../shared/interfaces/cast';
+import { CastAndCrew } from '../../shared/interfaces/cast';
 import { MovieDetails } from '../../shared/interfaces/movies';
 import { ImagePathPipe } from '../../shared/pipes/image-path.pipe';
 import { ApiService } from '../../shared/services/api.service';
@@ -46,21 +46,13 @@ export class CastDetailsComponent {
     }),
   );
 
-  public cast$: Observable<CastCard[]> = this.$movieId.pipe(
+  public cast$: Observable<CastAndCrew> = this.$movieId.pipe(
     switchMap(movieId => {
       const params = `${this.pageType}/` + movieId + ApiRequestType.Credits;
 
       return this.apiService.getMovieCast$(params, {
-        topTen: true,
+        top_ten: true,
       })
-    }),
-  );
-
-  public crew$: Observable<CastCard[]> = this.$movieId.pipe(
-    switchMap(movieId => {
-      const params = `${this.pageType}/` + movieId + ApiRequestType.Credits;
-
-      return this.apiService.getMovieCrew$(params);
     }),
   );
 

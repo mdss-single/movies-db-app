@@ -1,4 +1,4 @@
-import { SearchMediaType } from '../enums/search';
+import { MediaType } from '../enums/media-types';
 import {
   MovieDTO,
   MovieShortCard
@@ -9,7 +9,7 @@ export function movieMapper(obj: MovieDTO): MovieShortCard {
     id: obj.id ?? 0,
     title: obj.title ?? '',
     poster: obj.poster_path ?? '',
-    type: SearchMediaType.Movie,
+    type: MediaType.Movie,
     rating: obj.vote_average ?? 0,
     date: obj.release_date ?? new Date(),
   }
