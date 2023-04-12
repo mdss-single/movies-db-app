@@ -45,24 +45,17 @@
         </div>
 
         <ng-container *ngIf="(personCast$ | async) as castGroup">
-            <div class="person__acting" *ngIf="castGroup.cast.length">
+            <tmbd-person-cast
+                *ngIf="castGroup.cast.length"
+                [castList]="castGroup.cast">
                 <h3>Acting</h3>
-                <ng-container *ngTemplateOutlet="castSection; context: {castList: castGroup.cast}"></ng-container>
-            </div>
+            </tmbd-person-cast>
 
-            <div class="person__acting" *ngIf="castGroup.crew.length">
+            <tmbd-person-cast
+                *ngIf="castGroup.crew.length"
+                [castList]="castGroup.crew">
                 <h3>Directing</h3>
-                <ng-container *ngTemplateOutlet="castSection; context: {castList: castGroup.crew}"></ng-container>
-            </div>
-
-            <ng-template #castSection let-cast="castList">
-                <div *ngFor="let cast of cast" class="person__acting-row">
-                    <div>{{ cast.date | date: 'Y' }}</div>
-                    <div>
-                        <a [routerLink]="['/', cast.type, cast.id]">{{ cast.name }}</a> as {{ cast.role }}
-                    </div>
-                </div>
-            </ng-template>
+            </tmbd-person-cast>
         </ng-container>
     </main>
 </div>

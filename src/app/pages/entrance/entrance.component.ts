@@ -51,12 +51,12 @@ import { ApiService } from '../../shared/services/api.service';
 export class EntranceComponent {
   private readonly minSearchSymbol = 2;
 
-  private readonly popularMovies$: Observable<MovieShortCard[]> = this.apiService.getMovies$(ApiRequestType.MoviePopular);
-  private readonly topRatedMovies$: Observable<MovieShortCard[]> = this.apiService.getMovies$(ApiRequestType.MovieTopRated);
-  private readonly popularTv$: Observable<MovieShortCard[]> = this.apiService.getMovies$(ApiRequestType.TvPopular);
-  private readonly topRatedTv$: Observable<MovieShortCard[]> = this.apiService.getMovies$(ApiRequestType.TvTopRated);
+  private readonly popularMovies$: Observable<MovieShortCard[]> = this.apiService.getMovieList$(ApiRequestType.MoviePopular);
+  private readonly topRatedMovies$: Observable<MovieShortCard[]> = this.apiService.getMovieList$(ApiRequestType.MovieTopRated);
+  private readonly popularTv$: Observable<MovieShortCard[]> = this.apiService.getTvList$(ApiRequestType.TvPopular);
+  private readonly topRatedTv$: Observable<MovieShortCard[]> = this.apiService.getTvList$(ApiRequestType.TvTopRated);
 
-  public readonly upcomingMovies$: Observable<MovieShortCard[]> = this.apiService.getMovies$(ApiRequestType.MovieUpcoming);
+  public readonly upcomingMovies$: Observable<MovieShortCard[]> = this.apiService.getMovieList$(ApiRequestType.MovieUpcoming);
   public readonly popular$ = combineLatest([this.popularMovies$, this.popularTv$]);
   public readonly rated$ = combineLatest([this.topRatedMovies$, this.topRatedTv$]);
 

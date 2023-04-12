@@ -17,6 +17,7 @@ import {
   switchMap,
 } from 'rxjs';
 import { ApiRequestType } from '../../shared/enums/api-request';
+import { MediaType } from '../../shared/enums/media-types';
 import { CastAndCrew } from '../../shared/interfaces/cast';
 import { MovieDetails } from '../../shared/interfaces/movies';
 import { ImagePathPipe } from '../../shared/pipes/image-path.pipe';
@@ -38,26 +39,30 @@ import { MovieDetailsComponent } from '../movie-details/movie-details.component'
   ],
 })
 export class MovieTvSelectorComponent {
-  @Input() public pageType: 'movie' | 'tv' = 'movie';
+  @Input() public pageType: MediaType.Movie | MediaType.Tv = MediaType.Movie;
 
-  private movieId$: Observable<string> = this.route.params.pipe(
+  private pageId$: Observable<string> = this.route.params.pipe(
     map(value => value['id']),
     filter(Boolean)
   );
 
-  public pageDetails$: Observable<MovieDetails> = this.movieId$.pipe(
-    switchMap((movieId) => {
-      const params = `${this.pageType}/` + movieId;
+  public pageDetails$: Observable<MovieDetails> = this.pageId$.pipe(
+    switchMap((pageId) => {
+      const params = `${this.pageType}/` + pageId;
 
-      return this.apiService.getMovieDetails$(params);
+      if (this.pageType === MediaType.Movie) {
+        return this.apiService.getMovieDetails$(params);
+      }
+
+      return this.apiService.getTvDetails$(params);
     }),
   );
 
-  public cast$: Observable<CastAndCrew> = this.movieId$.pipe(
-    switchMap(movieId => {
-      const params = `${this.pageType}/` + movieId + ApiRequestType.Credits;
+  public cast$: Observable<CastAndCrew> = this.pageId$.pipe(
+    switchMap(pageId => {
+      const params = `${this.pageType}/` + pageId + ApiRequestType.Credits;
 
-      return this.apiService.getMovieCast$(params, {
+      return this.apiService.getMovieOrTvCast$(params, {
         top_ten: true,
       })
     }),

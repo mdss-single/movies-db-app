@@ -6,11 +6,15 @@ import {
   Observable
 } from 'rxjs';
 import { MediaType } from '../enums/media-types';
+import { isMovieCastGuard } from '../guards/cast.guard';
+import { isMovieCrewGuard } from '../guards/crew.guard';
 import {
-  castCrewMapper,
   castMovieMapper,
   castTvMapper,
+  crewMovieMapper,
+  crewTvMapper,
   movieDetailsMapper,
+  tvDetailsMapper,
   movieMapper,
   personMapper,
   searchMovieMapper,
@@ -20,16 +24,20 @@ import {
 } from '../helpers';
 import {
   CastAndCrew,
-  CastAndCrewDTO,
+  CastAndCrewResultDTO,
   CastCard,
-  CastDTO
+  MovieCastDTO,
+  MovieCrewDTO,
+  TvCastDTO,
+  TvCrewDTO
 } from '../interfaces/cast';
 import { ImageConfig } from '../interfaces/image-config';
 import {
   MovieDetails,
   MovieDetailsOptions,
   MovieDTO,
-  MovieShortCard
+  MovieShortCard,
+  TvDTO
 } from '../interfaces/movies';
 import {
   PersonDetails,
@@ -69,11 +77,21 @@ export class ApiService {
     );
   }
 
-  getMovies$(params: string): Observable<MovieShortCard[]> {
+  getMovieList$(params: string): Observable<MovieShortCard[]> {
     return this.http.get<{ results: MovieDTO[] }>(params).pipe(
       map(data => {
         return data.results.map((result) => {
-          return result.title ? movieMapper(result) : tvMapper(result);
+          return movieMapper(result);
+        });
+      }),
+    );
+  }
+
+  getTvList$(params: string): Observable<MovieShortCard[]> {
+    return this.http.get<{ results: TvDTO[] }>(params).pipe(
+      map(data => {
+        return data.results.map((result) => {
+          return tvMapper(result);
         });
       }),
     );
@@ -87,13 +105,26 @@ export class ApiService {
     );
   }
 
-  getMovieCast$(params: string, options?: MovieDetailsOptions): Observable<CastAndCrew> {
-    return this.http.get<CastAndCrewDTO>(params).pipe(
-      map((data: CastAndCrewDTO) => {
-        let castArr = data.cast.map((castItem: CastDTO) => {
-          return castItem.title ? castMovieMapper(castItem) : castTvMapper(castItem);
+  getTvDetails$(params: string): Observable<MovieDetails> {
+    return this.http.get<TvDTO>(params).pipe(
+      map(data => {
+        return tvDetailsMapper(data);
+      }),
+    );
+  }
+
+  getMovieOrTvCast$(params: string, options?: MovieDetailsOptions): Observable<CastAndCrew> {
+    return this.http.get<CastAndCrewResultDTO>(params).pipe(
+      map((data: CastAndCrewResultDTO) => {
+        let castArr = data.cast.map((castItem: MovieCastDTO | TvCastDTO) => {
+          const isMovieCast = isMovieCastGuard(castItem);
+          return isMovieCast ? castMovieMapper(castItem) : castTvMapper(castItem);
         });
-        const crewArr = data.crew.map((castItem: CastDTO) => castCrewMapper(castItem));
+
+        const crewArr = data.crew.map((castItem: MovieCrewDTO | TvCrewDTO) => {
+          const isMovieCrew = isMovieCrewGuard(castItem);
+          return isMovieCrew ? crewMovieMapper(castItem) : crewTvMapper(castItem);
+        });
 
         if (options?.top_ten && castArr.length) {
           castArr = castArr.slice(0, 9);
@@ -127,17 +158,21 @@ export class ApiService {
   }
 
   getPersonCast$(params: string): Observable<CastAndCrew> {
-    return this.http.get<CastAndCrewDTO>(params).pipe(
-      map((data: CastAndCrewDTO) => ({
+    return this.http.get<CastAndCrewResultDTO>(params).pipe(
+      map((data: CastAndCrewResultDTO) => ({
         cast: data.cast
-          .map((castItem: CastDTO) => {
-            return castItem.title ? castMovieMapper(castItem) : castTvMapper(castItem);
+          .map((castItem: MovieCastDTO | TvCastDTO) => {
+            const isMovieCast = isMovieCastGuard(castItem);
+            return isMovieCast ? castMovieMapper(castItem) : castTvMapper(castItem);
           })
           .sort((a: CastCard, b: CastCard) => {
             const getDateMs = (date: Date) => new Date(date).getTime();
             return getDateMs(b.date) - getDateMs(a.date);
           }),
-        crew: data.crew.map((castItem: CastDTO) => castCrewMapper(castItem)),
+        crew: data.crew.map((castItem: MovieCrewDTO | TvCrewDTO) => {
+          const isMovieCrew = isMovieCrewGuard(castItem);
+          return isMovieCrew ? crewMovieMapper(castItem) : crewTvMapper(castItem);
+        }),
       })),
     );
   }

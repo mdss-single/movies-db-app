@@ -19,6 +19,7 @@ import {
   switchMap
 } from 'rxjs';
 import { PersonCardComponent } from '../../components/person-card/person-card.component';
+import { PersonCastComponent } from '../../components/person-cast/person-cast.component';
 import { ScrollerComponent } from '../../components/scroller/scroller.component';
 import { ThumbnailCardSelectorComponent } from '../../components/thumbnail-card-selector/thumbnail-card-selector.component';
 import { ApiRequestType } from '../../shared/enums/api-request';
@@ -37,19 +38,20 @@ type DetailsWithKnownFor = {
 @Component({
   selector: 'tmbd-person',
   standalone: true,
-  imports: [
-    ImagePathPipe,
-    ScrollerComponent,
-    PersonCardComponent,
-    ThumbnailCardSelectorComponent,
-    DatePipe,
-    AsyncPipe,
-    NgIf,
-    NgForOf,
-    FilterPipe,
-    RouterLink,
-    NgTemplateOutlet,
-  ],
+    imports: [
+        ImagePathPipe,
+        ScrollerComponent,
+        PersonCardComponent,
+        ThumbnailCardSelectorComponent,
+        DatePipe,
+        AsyncPipe,
+        NgIf,
+        NgForOf,
+        FilterPipe,
+        RouterLink,
+        NgTemplateOutlet,
+        PersonCastComponent
+    ],
   templateUrl: './person.component.html',
   styleUrls: ['./person.component.scss']
 })

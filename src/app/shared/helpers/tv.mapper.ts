@@ -1,10 +1,10 @@
 import { MediaType } from '../enums/media-types';
 import {
-  MovieDTO,
-  MovieShortCard
+  MovieShortCard,
+  TvDTO
 } from '../interfaces/movies';
 
-export function tvMapper(obj: MovieDTO): MovieShortCard {
+export function tvMapper(obj: TvDTO): MovieShortCard {
   return {
     id: obj.id ?? 0,
     title: obj.name ?? '',

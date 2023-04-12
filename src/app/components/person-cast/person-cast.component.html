@@ -1,0 +1,10 @@
+<div class="cast-section" *ngIf="castList">
+    <ng-content></ng-content>
+
+    <div class="cast-section__row" *ngFor="let cast of castList">
+        <div>{{ cast.date | date: 'Y' }}</div>
+        <div>
+            <a [routerLink]="['/', cast.type, cast.id]">{{ cast.name }}</a> as {{ cast.role }}
+        </div>
+    </div>
+</div>

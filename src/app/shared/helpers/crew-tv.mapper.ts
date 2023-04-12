@@ -1,16 +1,16 @@
 import { MediaType } from '../enums/media-types';
 import {
   CastCard,
-  TvCastDTO
+  TvCrewDTO
 } from '../interfaces/cast';
 
-export function castTvMapper(obj: TvCastDTO): CastCard {
+export function crewTvMapper(obj: TvCrewDTO): CastCard {
   return {
     id: obj.id ?? 0,
     name: obj.name ?? '',
-    date: obj.first_air_date ?? new Date(),
+    poster: obj.poster_path ?? '',
+    role: obj.job ?? '',
+    date: new Date(),
     type: MediaType.Tv,
-    poster: obj.profile_path ?? '',
-    role: obj.character ?? '',
   }
 }
