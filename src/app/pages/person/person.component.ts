@@ -30,7 +30,7 @@ import { FilterPipe } from '../../shared/pipes/filter.pipe';
 import { ImagePathPipe } from '../../shared/pipes/image-path.pipe';
 import { ApiService } from '../../shared/services/api.service';
 
-type DetailsWithKnownFor = {
+type PersonDetailsWithKnowFor = {
   person: PersonDetails;
   cast: SearchCard[];
 }
@@ -61,7 +61,7 @@ export class PersonComponent {
     filter(Boolean),
   );
 
-  public person$: Observable<DetailsWithKnownFor> = this.personId$.pipe(
+  public person$: Observable<PersonDetailsWithKnowFor> = this.personId$.pipe(
     switchMap((personId) => {
       const personRequest = ApiRequestType.Person + personId;
       return this.apiService.getPersonDetails$(personRequest);
