@@ -15,6 +15,7 @@ import { HeaderComponent } from './components/header/header.component';
 
 import { BaseUrlInterceptor } from './shared/interceptors/base-url.interceptor';
 import { MapResponseInterceptor } from './shared/interceptors/map-response.interceptor';
+import { GuestSessionService } from './shared/services/guest-session.service';
 import { ImageConfigService } from './shared/services/image-config.service';
 
 @NgModule({
@@ -44,7 +45,13 @@ import { ImageConfigService } from './shared/services/image-config.service';
       useFactory: (imageConfig: ImageConfigService) => () => imageConfig.loadImageConfig(),
       multi: true,
       deps: [ImageConfigService]
-    }
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (guestSession: GuestSessionService) => () => guestSession.getGuestSession(),
+      multi: true,
+      deps: [GuestSessionService]
+    },
   ],
   bootstrap: [AppComponent]
 })

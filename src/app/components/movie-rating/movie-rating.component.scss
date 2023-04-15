@@ -1,0 +1,27 @@
+.rating {
+    display: flex;
+    pointer-events: none;
+
+    &__star {
+        position: relative;
+        flex-shrink: 0;
+        width: 34px;
+        height: 34px;
+        mask-image: url('~src/assets/images/star.svg');
+        mask-position: center;
+        mask-repeat: no-repeat;
+        mask-size: 28px;
+        background-color: rgb(var(--tmdbLightBlue));
+        pointer-events: auto;
+        cursor: pointer;
+        transition: background-color var(--transitionTime);
+    }
+
+    &:hover .rating__star {
+        background-color: rgb(var(--accountPink));
+    }
+
+    &:hover .rating__star:hover ~ * {
+        background-color: rgb(var(--tmdbLightGreen));
+    }
+}

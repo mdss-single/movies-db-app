@@ -81,3 +81,12 @@ export interface SpokenLanguage {
   iso_639_1: string;
   name:      string;
 }
+
+export interface MovieRating {
+  status_code: number,
+  status_message: string;
+}
+
+export interface MovieRatingValue {
+  value: number;
+}

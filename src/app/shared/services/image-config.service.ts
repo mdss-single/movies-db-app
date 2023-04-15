@@ -5,7 +5,8 @@ import {
   take,
   tap
 } from 'rxjs';
-import { ImageConfig } from '../interfaces/image-config';
+import { ApiRequestType } from '../enums/api-request';
+import { ImageConfig } from '../interfaces/general';
 import { ApiService } from './api.service';
 
 @Injectable({
@@ -21,7 +22,7 @@ export class ImageConfigService {
   constructor(private apiService: ApiService) {}
 
   public loadImageConfig(): Observable<ImageConfig> {
-    return this.apiService.getImageConfig$('configuration').pipe(
+    return this.apiService.getImageConfig$(ApiRequestType.Configuration).pipe(
       take(1),
       tap(value => this._imageConfig$.next(value)),
     );

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import {
   filter,
   map,
-  Observable
+  Observable,
 } from 'rxjs';
 import { MediaType } from '../enums/media-types';
 import { isMovieCastGuard } from '../guards/cast.guard';
@@ -31,11 +31,16 @@ import {
   TvCastDTO,
   TvCrewDTO
 } from '../interfaces/cast';
-import { ImageConfig } from '../interfaces/image-config';
+import {
+  GuestSession,
+  ImageConfig
+} from '../interfaces/general';
 import {
   MovieDetails,
   MovieDetailsOptions,
   MovieDTO,
+  MovieRating,
+  MovieRatingValue,
   MovieShortCard,
   TvDTO
 } from '../interfaces/movies';
@@ -179,5 +184,13 @@ export class ApiService {
 
   getImageConfig$(params: string): Observable<ImageConfig> {
     return this.http.get<{ images: ImageConfig }>(params).pipe(map(data => data.images));
+  }
+
+  getGuestSession$(params: string): Observable<GuestSession> {
+    return this.http.get<GuestSession>(params);
+  }
+
+  rateMovieOrTv$(params: string, rating: MovieRatingValue): Observable<MovieRating> {
+    return this.http.post<MovieRating>(params, rating);
   }
 }

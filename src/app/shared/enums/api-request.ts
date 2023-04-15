@@ -1,4 +1,5 @@
 export enum ApiRequestType {
+  Configuration = 'configuration',
   MoviePopular = 'movie/popular',
   MovieTopRated = 'movie/top_rated',
   MovieUpcoming = 'movie/upcoming',
@@ -9,4 +10,6 @@ export enum ApiRequestType {
   Person = 'person/',
   PersonCast = '/combined_credits',
   SearchPerson = 'search/person?query=',
+  Rating = 'rating?guest_session_id=',
+  GuestSession = 'authentication/guest_session/new',
 }
