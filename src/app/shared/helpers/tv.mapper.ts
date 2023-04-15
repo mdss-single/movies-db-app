@@ -11,6 +11,6 @@ export function tvMapper(obj: TvDTO): MovieShortCard {
     poster: obj.poster_path ?? '',
     type: MediaType.Tv,
     rating: obj.vote_average ?? 0,
-    date: obj.first_air_date ?? new Date(),
+    date: obj.first_air_date ? new Date(obj.first_air_date) : new Date(),
   }
 }

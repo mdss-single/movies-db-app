@@ -11,6 +11,6 @@ export function searchMovieMapper(obj: SearchCardDTO): SearchCard {
     poster: obj.poster_path ?? '',
     type: MediaType.Movie,
     rating: obj.vote_average ?? 0,
-    date: obj.release_date ?? new Date(),
+    date: obj.release_date ? new Date(obj.release_date) : new Date(),
   }
 }
