@@ -1,0 +1,33 @@
+.person {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    grid-gap: 20px;
+    margin-top: 50px;
+
+    &__photo {
+        display: block;
+        margin-bottom: 30px;
+        width: 100%;
+        border-radius: 8px;
+    }
+
+    &__section {
+        margin-top: 15px;
+
+        p {
+            font-weight: bold;
+        }
+    }
+
+    &__name {
+        margin-bottom: 25px;
+    }
+
+    &__bio {
+        margin-bottom: 50px;
+
+        h4 {
+            margin-bottom: 6px;
+        }
+    }
+}

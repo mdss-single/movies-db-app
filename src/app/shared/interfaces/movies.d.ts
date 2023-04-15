@@ -1,11 +1,4 @@
-export interface MoviesDTO {
-  page: number;
-  results: MovieDTO[];
-  total_results: number,
-  total_pages: number
-}
-
-export interface MovieDTO {
+export interface MediaDTO {
   adult?:                 boolean;
   backdrop_path?:         string;
   belongs_to_collection?: null;
@@ -16,26 +9,32 @@ export interface MovieDTO {
   id?:                    number;
   imdb_id?:               string;
   original_language?:     string;
-  original_title?:        string;
   overview?:              string;
   popularity?:            number;
   poster_path?:           null;
   production_companies?:  ProductionCompany[];
   production_countries?:  ProductionCountry[];
   origin_country?:        string[];
-  release_date?:          Date;
-  first_air_date?:        Date;
   revenue?:               number;
   runtime?:               number;
   spoken_languages?:      SpokenLanguage[];
   status?:                string;
   tagline?:               string;
-  title?:                 string;
-  name?:                  string;
-  original_name?:         string;
   video?:                 boolean;
   vote_average?:          number;
   vote_count?:            number;
+}
+
+export interface MovieDTO extends MediaDTO {
+  title?:          string;
+  original_title?: string;
+  release_date?:   Date;
+}
+
+export interface TvDTO extends MediaDTO {
+  name?:           string;
+  original_name?:  string;
+  first_air_date?: Date;
 }
 
 export interface MovieShortCard {
@@ -58,7 +57,7 @@ export interface MovieDetails {
 }
 
 export interface MovieDetailsOptions {
-  topTen?: boolean;
+  top_ten?: boolean;
 }
 
 export interface Genre {

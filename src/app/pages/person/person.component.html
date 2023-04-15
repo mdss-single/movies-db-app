@@ -1,0 +1,61 @@
+<div class="person" *ngIf="(person$ | async) as details">
+    <aside class="person__sidebar">
+        <img
+            *ngIf="details.person.photo"
+            [src]="details.person.photo | imagePath"
+            [srcset]="details.person.photo | imagePath: true"
+            [alt]="details.person.name"
+            class="person__photo">
+
+        <div class="person__section" *ngIf="details.person.birthday">
+            <p>Birthday</p>
+            {{ details.person.birthday | date:'dd MMM y' }}
+        </div>
+
+        <div class="person__section" *ngIf="details.person.gender">
+            <p>Gender</p>
+            {{ details.person.gender }}
+        </div>
+
+        <div class="person__section" *ngIf="details.person.place_of_birth">
+            <p>Place of birth</p>
+            {{ details.person.place_of_birth }}
+        </div>
+    </aside>
+
+    <main class="person__info">
+        <h3 class="person__name">{{ details.person.name }}</h3>
+
+        <div class="person__bio">
+            <div class="person__section" *ngIf="details.person.biography">
+                <h4>Biography</h4>
+                <div>{{ details.person.biography }}</div>
+            </div>
+
+            <div class="person__section" *ngIf="details.cast.length">
+                <h4>Known for</h4>
+                <tmbd-scroller>
+                    <div class="grid grid--scroller">
+                        <tmbd-thumbnail-card-selector
+                            *ngFor="let credit of details.cast"
+                            [card]="credit"></tmbd-thumbnail-card-selector>
+                    </div>
+                </tmbd-scroller>
+            </div>
+        </div>
+
+        <ng-container *ngIf="(personCast$ | async) as castGroup">
+            <tmbd-person-cast
+                *ngIf="castGroup.cast.length"
+                [castList]="castGroup.cast">
+                <h3>Acting</h3>
+            </tmbd-person-cast>
+
+            <tmbd-person-cast
+                *ngIf="castGroup.crew.length"
+                [castList]="castGroup.crew">
+                <h3>Directing</h3>
+            </tmbd-person-cast>
+        </ng-container>
+    </main>
+</div>

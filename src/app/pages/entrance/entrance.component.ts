@@ -24,7 +24,7 @@ import { PersonCardComponent } from '../../components/person-card/person-card.co
 import { ScrollerComponent } from '../../components/scroller/scroller.component';
 import { ThumbnailCardSelectorComponent } from '../../components/thumbnail-card-selector/thumbnail-card-selector.component';
 import { ApiRequestType } from '../../shared/enums/api-request';
-import { SearchMediaType } from '../../shared/enums/search';
+import { MediaType } from '../../shared/enums/media-types';
 import { MovieShortCard } from '../../shared/interfaces/movies';
 import { SearchCard } from '../../shared/interfaces/search';
 import { FilterPipe } from '../../shared/pipes/filter.pipe';
@@ -51,17 +51,17 @@ import { ApiService } from '../../shared/services/api.service';
 export class EntranceComponent {
   private readonly minSearchSymbol = 2;
 
-  private readonly popularMovies$: Observable<MovieShortCard[]> = this.apiService.getMovies$(ApiRequestType.MoviePopular);
-  private readonly topRatedMovies$: Observable<MovieShortCard[]> = this.apiService.getMovies$(ApiRequestType.MovieTopRated);
-  private readonly popularTv$: Observable<MovieShortCard[]> = this.apiService.getMovies$(ApiRequestType.TvPopular);
-  private readonly topRatedTv$: Observable<MovieShortCard[]> = this.apiService.getMovies$(ApiRequestType.TvTopRated);
+  private readonly popularMovies$: Observable<MovieShortCard[]> = this.apiService.getMovieList$(ApiRequestType.MoviePopular);
+  private readonly topRatedMovies$: Observable<MovieShortCard[]> = this.apiService.getMovieList$(ApiRequestType.MovieTopRated);
+  private readonly popularTv$: Observable<MovieShortCard[]> = this.apiService.getTvList$(ApiRequestType.TvPopular);
+  private readonly topRatedTv$: Observable<MovieShortCard[]> = this.apiService.getTvList$(ApiRequestType.TvTopRated);
 
-  public readonly upcomingMovies$: Observable<MovieShortCard[]> = this.apiService.getMovies$(ApiRequestType.MovieUpcoming);
+  public readonly upcomingMovies$: Observable<MovieShortCard[]> = this.apiService.getMovieList$(ApiRequestType.MovieUpcoming);
   public readonly popular$ = combineLatest([this.popularMovies$, this.popularTv$]);
   public readonly rated$ = combineLatest([this.topRatedMovies$, this.topRatedTv$]);
 
-  public readonly filterByPerson = (value: SearchCard) => value.type === SearchMediaType.Person;
-  public readonly filterByMovie = (value: SearchCard) => value.type !== SearchMediaType.Person;
+  public readonly filterByPerson = (value: SearchCard) => value.type === MediaType.Person;
+  public readonly filterByMovie = (value: SearchCard) => value.type !== MediaType.Person;
 
   public searchInput = new FormControl('');
   public isSearchHidden$ = this.searchInput.valueChanges.pipe(

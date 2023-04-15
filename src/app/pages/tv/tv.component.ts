@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MovieTvSelectorComponent } from '../../components/movie-tv-selector/movie-tv-selector.component';
-import { PageDetailsType } from '../../shared/enums/page-types';
+import { MediaType } from '../../shared/enums/media-types';
 
 @Component({
   selector: 'tmbd-tv',
@@ -12,5 +12,5 @@ import { PageDetailsType } from '../../shared/enums/page-types';
   styleUrls: ['./tv.component.scss']
 })
 export class TvComponent {
-  public pageType = PageDetailsType;
+  public pageType = MediaType;
 }

@@ -1,7 +1,4 @@
-import {
-  SearchMediaType,
-  SearchOriginalLanguage
-} from '../enums/search';
+import { MediaType } from '../enums/media-types';
 import { MovieDTO } from './movies';
 
 export interface SearchCardDTO {
@@ -11,11 +8,10 @@ export interface SearchCardDTO {
   overview?:          string;
   backdrop_path?:     null | string;
   vote_average?:      number;
-  media_type?:        SearchMediaType;
+  media_type?:        MediaType;
   first_air_date?:    Date;
   origin_country?:    string[];
   genre_ids?:         number[];
-  original_language?: SearchOriginalLanguage;
   vote_count?:        number;
   name?:              string;
   original_name?:     string;
@@ -32,7 +28,16 @@ export interface SearchCard {
   id: number;
   title: string;
   poster: string;
-  type: SearchMediaType;
+  type: MediaType;
   rating?: number;
   date?: Date;
+}
+
+export interface SearchPersonDTO {
+  id?:           number;
+  name:          string;
+  known_for:     SearchCardDTO[];
+  profile_path?: string | null;
+  adult?:        boolean;
+  popularity:    number;
 }

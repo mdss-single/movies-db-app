@@ -1,4 +1,4 @@
-export interface Person {
+export interface PersonDTO {
   birthday?:             Date;
   known_for_department?: string;
   deathday?:             null;
@@ -13,4 +13,14 @@ export interface Person {
   adult?:                boolean;
   imdb_id?:              string;
   homepage?:             null;
+}
+
+export interface PersonDetails {
+  id:             number;
+  name:           string;
+  biography:      string;
+  birthday:       Date;
+  gender:         string;
+  place_of_birth: string;
+  photo:          string;
 }

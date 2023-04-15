@@ -1,39 +1,58 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
+  filter,
   map,
   Observable
 } from 'rxjs';
-import { SearchMediaType } from '../enums/search';
+import { MediaType } from '../enums/media-types';
+import { isMovieCastGuard } from '../guards/cast.guard';
+import { isMovieCrewGuard } from '../guards/crew.guard';
 import {
+  castMovieMapper,
+  castTvMapper,
+  crewMovieMapper,
+  crewTvMapper,
+  movieDetailsMapper,
+  tvDetailsMapper,
   movieMapper,
-  tvMapper,
+  personMapper,
   searchMovieMapper,
   searchPersonMapper,
   searchTvMapper,
-  movieDetailsMapper,
-  castMapper
+  tvMapper
 } from '../helpers';
 import {
+  CastAndCrew,
+  CastAndCrewResultDTO,
   CastCard,
-  CastDTO
+  MovieCastDTO,
+  MovieCrewDTO,
+  TvCastDTO,
+  TvCrewDTO
 } from '../interfaces/cast';
 import { ImageConfig } from '../interfaces/image-config';
 import {
   MovieDetails,
   MovieDetailsOptions,
   MovieDTO,
-  MovieShortCard
+  MovieShortCard,
+  TvDTO
 } from '../interfaces/movies';
 import {
+  PersonDetails,
+  PersonDTO
+} from '../interfaces/person';
+import {
   SearchCard,
-  SearchCardDTO
+  SearchCardDTO,
+  SearchPersonDTO
 } from '../interfaces/search';
 
-const searchCardMapperFactory: {[key in SearchMediaType]: (value: SearchCardDTO) => SearchCard } = {
-  [SearchMediaType.Movie]: searchMovieMapper,
-  [SearchMediaType.Tv]: searchTvMapper,
-  [SearchMediaType.Person]: searchPersonMapper,
+const searchCardMapperFactory: { [key in MediaType]: (value: SearchCardDTO) => SearchCard } = {
+  [MediaType.Movie]: searchMovieMapper,
+  [MediaType.Tv]: searchTvMapper,
+  [MediaType.Person]: searchPersonMapper,
 }
 
 @Injectable({
@@ -58,11 +77,21 @@ export class ApiService {
     );
   }
 
-  getMovies$(params: string): Observable<MovieShortCard[]> {
+  getMovieList$(params: string): Observable<MovieShortCard[]> {
     return this.http.get<{ results: MovieDTO[] }>(params).pipe(
       map(data => {
         return data.results.map((result) => {
-          return result.title ? movieMapper(result) : tvMapper(result);
+          return movieMapper(result);
+        });
+      }),
+    );
+  }
+
+  getTvList$(params: string): Observable<MovieShortCard[]> {
+    return this.http.get<{ results: TvDTO[] }>(params).pipe(
+      map(data => {
+        return data.results.map((result) => {
+          return tvMapper(result);
         });
       }),
     );
@@ -76,29 +105,75 @@ export class ApiService {
     );
   }
 
-  getMovieCast$(params: string, options?: MovieDetailsOptions): Observable<CastCard[]> {
-    return this.http.get<{ cast: CastDTO[] }>(params).pipe(
+  getTvDetails$(params: string): Observable<MovieDetails> {
+    return this.http.get<TvDTO>(params).pipe(
       map(data => {
-        if (options?.topTen) {
-          return data.cast.slice(0, 9).map((result) => {
-            return castMapper(result);
-          });
-        }
-
-        return data.cast.map((result) => {
-          return castMapper(result);
-        });
+        return tvDetailsMapper(data);
       }),
     );
   }
 
-  getMovieCrew$(params: string): Observable<CastCard[]> {
-    return this.http.get<{ crew: CastDTO[] }>(params).pipe(
-      map(data => {
-        return data.crew.map((result) => {
-          return castMapper(result);
+  getMovieOrTvCast$(params: string, options?: MovieDetailsOptions): Observable<CastAndCrew> {
+    return this.http.get<CastAndCrewResultDTO>(params).pipe(
+      map((data: CastAndCrewResultDTO) => {
+        let castArr = data.cast.map((castItem: MovieCastDTO | TvCastDTO) => {
+          const isMovieCast = isMovieCastGuard(castItem);
+          return isMovieCast ? castMovieMapper(castItem) : castTvMapper(castItem);
         });
+
+        const crewArr = data.crew.map((castItem: MovieCrewDTO | TvCrewDTO) => {
+          const isMovieCrew = isMovieCrewGuard(castItem);
+          return isMovieCrew ? crewMovieMapper(castItem) : crewTvMapper(castItem);
+        });
+
+        if (options?.top_ten && castArr.length) {
+          castArr = castArr.slice(0, 9);
+        }
+
+        return {
+          cast: castArr,
+          crew: crewArr,
+        }
       }),
+    );
+  }
+
+  getPersonDetails$(params: string): Observable<PersonDetails> {
+    return this.http.get<PersonDTO>(params).pipe(
+      map(data => personMapper(data))
+    );
+  }
+
+  getPersonKnowsFor$(params: string, id: number): Observable<SearchCard[]> {
+    return this.http.get<{ results: SearchPersonDTO[] }>(params).pipe(
+      map((data) => {
+        return data.results.find((person) => person.id === id);
+      }),
+      filter(Boolean),
+      map((person) => {
+        return person.known_for
+          .map((card) => card.title ? searchMovieMapper(card) : searchTvMapper(card));
+      }),
+    );
+  }
+
+  getPersonCast$(params: string): Observable<CastAndCrew> {
+    return this.http.get<CastAndCrewResultDTO>(params).pipe(
+      map((data: CastAndCrewResultDTO) => ({
+        cast: data.cast
+          .map((castItem: MovieCastDTO | TvCastDTO) => {
+            const isMovieCast = isMovieCastGuard(castItem);
+            return isMovieCast ? castMovieMapper(castItem) : castTvMapper(castItem);
+          })
+          .sort((a: CastCard, b: CastCard) => {
+            const getDateMs = (date: Date) => new Date(date).getTime();
+            return getDateMs(b.date) - getDateMs(a.date);
+          }),
+        crew: data.crew.map((castItem: MovieCrewDTO | TvCrewDTO) => {
+          const isMovieCrew = isMovieCrewGuard(castItem);
+          return isMovieCrew ? crewMovieMapper(castItem) : crewTvMapper(castItem);
+        }),
+      })),
     );
   }
 

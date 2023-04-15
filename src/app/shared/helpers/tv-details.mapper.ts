@@ -1,15 +1,15 @@
 import {
   MovieDetails,
-  MovieDTO
+  TvDTO
 } from '../interfaces/movies';
 
-export function movieDetailsMapper(obj: MovieDTO): MovieDetails {
+export function tvDetailsMapper(obj: TvDTO): MovieDetails {
   return {
     id: obj.id ?? 0,
-    title: obj.title ?? '',
+    title: obj.name ?? '',
     description: obj.overview ?? '',
     picture: obj.backdrop_path ?? '',
-    date: obj.release_date ? new Date(obj.release_date) : new Date(),
+    date: obj.first_air_date ? new Date(obj.first_air_date) : new Date(),
     genres: obj.genres ?? [],
     rating: obj.vote_average ?? 0,
   }

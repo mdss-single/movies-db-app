@@ -7,16 +7,16 @@
     </div>
 </div>
 
-<div class="movie-cast">
-    <div class="movie-cast__section" *ngIf="(cast$ | async) as movieCastList">
+<div class="movie-cast" *ngIf="(cast$ | async) as movieCastList">
+    <div class="movie-cast__section" *ngIf="movieCastList.cast.length">
         <h3>Actors</h3>
 
-        <tmbd-cast-list [castList]="movieCastList"></tmbd-cast-list>
+        <tmbd-cast-list [castList]="movieCastList.cast"></tmbd-cast-list>
     </div>
 
-    <div class="movie-cast__section" *ngIf="(crew$ | async) as movieCrewList">
+    <div class="movie-cast__section" *ngIf="movieCastList.crew.length">
         <h3>Not Actors</h3>
 
-        <tmbd-cast-list [castList]="movieCrewList"></tmbd-cast-list>
+        <tmbd-cast-list [castList]="movieCastList.crew"></tmbd-cast-list>
     </div>
 </div>
