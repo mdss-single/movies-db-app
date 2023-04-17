@@ -1,5 +1,5 @@
 <ng-container *ngIf="(pageDetails$ | async) as details">
-    <tmbd-movie-details [details]="details"></tmbd-movie-details>
+    <tmbd-movie-details [details]="details" [pageType]="pageType"></tmbd-movie-details>
 </ng-container>
 
 <div class="cast" *ngIf="(cast$ | async) as castList">
