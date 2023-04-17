@@ -6,11 +6,12 @@ import {
 import {
   Component,
   Input,
+  OnDestroy
 } from '@angular/core';
-import { take } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { ApiRequestType } from '../../shared/enums/api-request';
 import { MediaType } from '../../shared/enums/media-types';
-import {  MovieDetails } from '../../shared/interfaces/movies';
+import { MovieDetails } from '../../shared/interfaces/movies';
 import { ImagePathPipe } from '../../shared/pipes/image-path.pipe';
 import { ApiService } from '../../shared/services/api.service';
 import { GuestSessionService } from '../../shared/services/guest-session.service';
@@ -23,11 +24,12 @@ import { MovieRatingComponent } from '../movie-rating/movie-rating.component';
   templateUrl: './movie-details.component.html',
   styleUrls: ['./movie-details.component.scss']
 })
-export class MovieDetailsComponent {
+export class MovieDetailsComponent implements OnDestroy {
   @Input() public details?: MovieDetails;
   @Input() public pageType: MediaType.Movie | MediaType.Tv = MediaType.Movie;
 
   private guestSession = this.guestSessionService.guestSession;
+  private rateSubscription!: Subscription;
   public isVoted = false;
 
   constructor(
@@ -37,13 +39,15 @@ export class MovieDetailsComponent {
 
   public rateMovieOrTv(rating: number): void {
     const rateParams = `${this.pageType}/${this.details?.id}/${ApiRequestType.Rating + this.guestSession}`;
-
-    this.apiService.rateMovieOrTv$(rateParams, {
+    const rateValue = {
       value: rating,
-    })
-    .pipe(
-      take(1),
-    )
-    .subscribe(_ => this.isVoted = true);
+    };
+
+    this.rateSubscription = this.apiService.rateMovieOrTv$(rateParams, rateValue)
+      .subscribe(_ => this.isVoted = true);
+  }
+
+  public ngOnDestroy(): void {
+    this.rateSubscription.unsubscribe();
   }
 }
