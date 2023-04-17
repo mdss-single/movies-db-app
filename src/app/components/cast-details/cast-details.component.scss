@@ -1,34 +1,39 @@
 .movie-info {
-    background-color: rgb(var(--darkerGrey));
     padding: 20px 0;
+    border-top: 1px solid #444;
+    color: rgb(var(--white));
+    background-image: linear-gradient(to bottom right, rgba(10.5, 31.5, 52.5, 1), rgba(10.5, 31.5, 52.5, 0.84));
 
     &__wrapper {
-        display: grid;
-        grid-template-areas: "pic title" "pic back";
-        grid-template-columns: max-content 1fr;
-        grid-column-gap: 20px;
-        grid-row-gap: 5px;
+        display: flex;
+        gap: 20px;
     }
 
     &__pic {
-        grid-area: pic;
         width: 80px;
+        border-radius: 5px;
     }
 
-    &__title {
-        grid-area: title;
+    &__details {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
     }
 
     &__back {
-        grid-area: back;
+        color: rgb(var(--white));
     }
 }
 
 .movie-cast {
     display: grid;
-    grid-template-columns: 1fr 360px;
+    grid-template-columns: 1fr 1fr;
     grid-gap: 50px;
-    margin-top: 50px;
+    margin-top: 20px;
 
-    &__section {}
+    &__section {
+        h3 {
+            margin-bottom: 20px;
+        }
+    }
 }

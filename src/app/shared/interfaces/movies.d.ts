@@ -50,6 +50,7 @@ export interface MovieDetails {
   id: number;
   title: string;
   description: string;
+  bg: string;
   picture: string;
   date: Date;
   genres: Genre[];

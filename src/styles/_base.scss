@@ -53,3 +53,10 @@ a {
 h1, h2, h3, h4, h5, h6, p {
     margin: 0;
 }
+
+.tag {
+    background-color: rgb(var(--accountBlue));
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}

@@ -48,6 +48,8 @@ export class MovieDetailsComponent implements OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.rateSubscription.unsubscribe();
+    if (this.rateSubscription) {
+      this.rateSubscription.unsubscribe();
+    }
   }
 }

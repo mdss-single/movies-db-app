@@ -1,0 +1,21 @@
+.cast {
+    display: flex;
+    flex-direction: column;
+    margin-top: 50px;
+
+    &__header {
+        display: flex;
+    }
+
+    &__link {
+        color: rgb(var(--black));
+
+        &::after {
+            content: '→';
+        }
+    }
+
+    h2 {
+        margin-right: auto;
+    }
+}

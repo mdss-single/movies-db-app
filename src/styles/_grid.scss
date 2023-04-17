@@ -48,3 +48,8 @@
         @include typo('title');
     }
 }
+
+.table-list {
+    display: grid;
+    gap: 16px;
+}
