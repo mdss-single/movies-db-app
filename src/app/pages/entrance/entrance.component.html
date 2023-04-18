@@ -1,20 +1,22 @@
 <section class="hero">
-    <div class="hero__title">
-        <p>Добро пожаловать.</p>
-        <p>Миллионы фильмов, сериалов и людей. Исследуйте сейчас.</p>
-    </div>
+    <div class="container">
+        <div class="hero__title">
+            <p>Добро пожаловать.</p>
+            <p>Миллионы фильмов, сериалов и людей. Исследуйте сейчас.</p>
+        </div>
 
-    <input
-        type="text"
-        class="hero__search"
-        name="searchInput"
-        [formControl]="searchInput"
-        placeholder="Search a movie or a tv show">
+        <input
+            type="text"
+            class="hero__search"
+            name="searchInput"
+            [formControl]="searchInput"
+            placeholder="Search a movie or a tv show">
+    </div>
 </section>
 
 <ng-container *ngIf="isSearchHidden$ | async">
     <ng-container *ngIf="(searchResult$ | async) as searchResult">
-        <section class="section" *ngIf="searchResult | filter: filterByMovie as searchResultMovies">
+        <section class="container section" *ngIf="searchResult | filter: filterByMovie as searchResultMovies">
             <h2 class="section__title">Founded movies and tv</h2>
             <tmbd-scroller>
                 <div class="grid grid--scroller">
@@ -25,7 +27,7 @@
             </tmbd-scroller>
         </section>
 
-        <section class="section" *ngIf="searchResult | filter: filterByPerson as searchResultPersons">
+        <section class="container section" *ngIf="searchResult | filter: filterByPerson as searchResultPersons">
             <h2 class="section__title">Founded persons</h2>
             <tmbd-scroller>
                 <div class="grid grid--scroller">
@@ -38,7 +40,7 @@
     </ng-container>
 </ng-container>
 
-<section class="section" *ngIf="(popular$ | async) as popularSectionList; else loadingState">
+<section class="container section" *ngIf="(popular$ | async) as popularSectionList; else loadingState">
     <h2 class="section__title">Popular</h2>
     <tmbd-scroller>
         <div class="grid grid--scroller">
@@ -52,7 +54,7 @@
     </tmbd-scroller>
 </section>
 
-<section class="section" *ngIf="(rated$ | async) as topRatedSectionList; else loadingState">
+<section class="container section" *ngIf="(rated$ | async) as topRatedSectionList; else loadingState">
     <h2 class="section__title">Top Rated</h2>
     <tmbd-scroller>
         <div class="grid grid--scroller">
@@ -66,7 +68,7 @@
     </tmbd-scroller>
 </section>
 
-<section class="section" *ngIf="(upcomingMovies$ | async) as upcomingList; else loadingState">
+<section class="container section" *ngIf="(upcomingMovies$ | async) as upcomingList; else loadingState">
     <h2 class="section__title">Upcoming</h2>
     <tmbd-scroller>
         <div class="grid grid--scroller">
@@ -79,7 +81,7 @@
 </section>
 
 <ng-template #loadingState>
-    <section class="section">
+    <section class="container section">
         Loading ...
     </section>
 </ng-template>

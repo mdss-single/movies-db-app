@@ -1,5 +1,6 @@
 import {
   AsyncPipe,
+  DatePipe,
   NgIf
 } from '@angular/common';
 import {
@@ -27,7 +28,7 @@ import { CastListComponent } from '../cast-list/cast-list.component';
 @Component({
   selector: 'tmbd-cast-details',
   standalone: true,
-  imports: [ImagePathPipe, CastListComponent, AsyncPipe, NgIf, RouterLink],
+  imports: [ImagePathPipe, CastListComponent, AsyncPipe, NgIf, RouterLink, DatePipe],
   templateUrl: './cast-details.component.html',
   styleUrls: ['./cast-details.component.scss']
 })

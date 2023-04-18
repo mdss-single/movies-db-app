@@ -29,6 +29,7 @@ import { MovieDetailsComponent } from '../movie-details/movie-details.component'
   selector: 'tmbd-movie-tv-selector',
   standalone: true,
   templateUrl: './movie-tv-selector.component.html',
+  styleUrls: ['./movie-tv-selector.component.scss'],
   imports: [
     AsyncPipe,
     ImagePathPipe,

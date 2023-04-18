@@ -1,35 +1,51 @@
 <div *ngIf="details" class="movie">
-    <div class="movie__picture" *ngIf="details.picture">
+    <div class="movie__bg">
         <img
             [src]="details.picture | imagePath"
             [srcset]="details.picture | imagePath: true"
-            [alt]="details.title">
+            alt=""
+            class="movie__bg-pic">
     </div>
 
-    <div class="movie__general">
-        <h1>{{ details.title }}</h1>
-
-        <div class="movie__description" *ngIf="details.description">
-            {{ details.description }}
+    <div class="container movie__container">
+        <div class="movie__picture" *ngIf="details.picture">
+            <img
+                [src]="details.picture | imagePath"
+                [srcset]="details.picture | imagePath: true"
+                [alt]="details.title"
+                class="movie__picture-pic">
         </div>
 
-        <div class="movie__date" *ngIf="details.date">
-            <time [attr.datetime]="details.date | date:'y-MM-dd'">
-                {{ details.date | date:'dd MMM y' }}
-            </time>
-        </div>
+        <div class="movie__general">
+            <h1>{{ details.title }}</h1>
 
-        <div *ngIf="details.genres.length">
-            <p>Genres</p>
-            <p *ngFor="let genres of details.genres">{{ genres.name }}</p>
-        </div>
+            <div class="movie__description" *ngIf="details.description">
+                {{ details.description }}
+            </div>
 
-        <div class="vote" *ngIf="isVoted; else rating">
-            <h3>Thanks for your vote!</h3>
-        </div>
+            <div class="movie__date" *ngIf="details.date">
+                <strong>Release date:</strong>
+                <time [attr.datetime]="details.date | date:'y-MM-dd'">
+                    {{ details.date | date:'dd MMM y' }}
+                </time>
+            </div>
 
-        <ng-template #rating>
-            <tmbd-movie-rating (movieRating)="rateMovieOrTv($event)"></tmbd-movie-rating>
-        </ng-template>
+            <div *ngIf="details.genres.length">
+                <strong>Genres:</strong>
+                <div class="movie__genres">
+                    <span
+                        *ngFor="let genres of details.genres"
+                        class="tag">{{ genres.name }}</span>
+                </div>
+            </div>
+
+            <div class="vote" *ngIf="isVoted; else rating">
+                <h3>Thanks for your vote!</h3>
+            </div>
+
+            <ng-template #rating>
+                <tmbd-movie-rating (movieRating)="rateMovieOrTv($event)"></tmbd-movie-rating>
+            </ng-template>
+        </div>
     </div>
 </div>

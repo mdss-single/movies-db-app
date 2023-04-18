@@ -3,10 +3,14 @@
 </ng-container>
 
 <div class="cast" *ngIf="(cast$ | async) as castList">
-    <h2>Main cast</h2>
-    <a routerLink="cast">See all</a>
+    <div class="container">
+        <div class="cast__header">
+            <h2>Main cast</h2>
+            <a routerLink="cast" class="cast__link">See all</a>
+        </div>
 
-    <tmbd-cast-list
-        [castList]="castList.cast"
-        [insideScroller]="true"></tmbd-cast-list>
+        <tmbd-cast-list
+            [castList]="castList.cast"
+            [insideScroller]="true"></tmbd-cast-list>
+    </div>
 </div>

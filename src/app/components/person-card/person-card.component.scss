@@ -28,6 +28,7 @@
         justify-content: center;
         align-items: center;
         color: rgb(var(--darkerGrey));
+        text-align: center;
         background-color: rgb(var(--lightGrey));
     }
 
@@ -50,5 +51,23 @@
         display: block;
         color: rgb(var(--black));
         margin-top: 5px;
+    }
+}
+
+:host(.person-flat) {
+    .person {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        width: 100%;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .person__poster {
+        width: 66px;
+        height: 66px;
+        object-fit: cover;
     }
 }

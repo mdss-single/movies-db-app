@@ -1,6 +1,7 @@
 .cast-section {
     margin-bottom: 30px;
     padding: 10px 20px;
+    border-radius: 5px;
     box-shadow: 0 0 5px rgb(var(--darkerGrey));
 }
 
@@ -9,7 +10,14 @@
     grid-template-columns: 54px 1fr;
     grid-gap: 10px;
     padding: 10px 0;
-    border-bottom: 1px solid rgb(var(--darkerGrey));
+
+    &:first-of-type {
+        margin-top: 10px;
+    }
+
+    &:not(:last-child) {
+        border-bottom: 1px solid rgb(var(--darkerGrey));
+    }
 
     div {
         position: relative;

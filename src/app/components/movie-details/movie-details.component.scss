@@ -1,11 +1,44 @@
 .movie {
-    display: grid;
-    grid-template-areas: "picture general" "main main";
-    margin-top: 50px;
+    position: relative;
+    padding: 50px 0;
+
+    &__bg {
+        position: absolute;
+        inset: 0;
+        display: grid;
+
+        &::after {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(to right, rgba(10.5, 31.5, 52.5, 1) calc((50vw - 170px) - 340px), rgba(10.5, 31.5, 52.5, 0.84) 50%, rgba(10.5, 31.5, 52.5, 0.84) 100%);
+            content: '';
+        }
+    }
+
+    &__bg-pic {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    &__container {
+        position: relative;
+        display: grid;
+        grid-template-areas: "picture general" "main main";
+        grid-gap: 20px;
+        color: rgb(var(--white));
+    }
 
     &__picture {
         grid-area: picture;
         width: 300px;
+    }
+
+    &__picture-pic {
+        width: 100%;
+        border-radius: 10px;
     }
 
     &__general {
@@ -13,6 +46,14 @@
         display: flex;
         flex-direction: column;
         gap: 20px;
+    }
+
+    &__genres {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin-top: 5px;
+        font-size: 80%;
     }
 
     &__main {
