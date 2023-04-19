@@ -69,9 +69,9 @@ export class ApiService {
 
   search$(params: string): Observable<SearchCard[]> {
     return this.http.get<{ results: SearchCardDTO[] }>(params).pipe(
-      map((data) => {
+      map((data: { results: SearchCardDTO[] }) => {
         return data.results
-          .map((result) => {
+          .map((result: SearchCardDTO) => {
             if (!result.media_type) {
               return {} as SearchCard;
             }
@@ -84,8 +84,8 @@ export class ApiService {
 
   getMovieList$(params: string): Observable<MovieShortCard[]> {
     return this.http.get<{ results: MovieDTO[] }>(params).pipe(
-      map(data => {
-        return data.results.map((result) => {
+      map((data: { results: MovieDTO[] }) => {
+        return data.results.map((result: MovieDTO) => {
           return movieMapper(result);
         });
       }),
@@ -94,8 +94,8 @@ export class ApiService {
 
   getTvList$(params: string): Observable<MovieShortCard[]> {
     return this.http.get<{ results: TvDTO[] }>(params).pipe(
-      map(data => {
-        return data.results.map((result) => {
+      map((data: { results: TvDTO[] }) => {
+        return data.results.map((result: TvDTO) => {
           return tvMapper(result);
         });
       }),
@@ -104,7 +104,7 @@ export class ApiService {
 
   getMovieDetails$(params: string): Observable<MovieDetails> {
     return this.http.get<MovieDTO>(params).pipe(
-      map(data => {
+      map((data: MovieDTO) => {
         return movieDetailsMapper(data);
       }),
     );
@@ -112,7 +112,7 @@ export class ApiService {
 
   getTvDetails$(params: string): Observable<MovieDetails> {
     return this.http.get<TvDTO>(params).pipe(
-      map(data => {
+      map((data: TvDTO) => {
         return tvDetailsMapper(data);
       }),
     );
@@ -151,8 +151,8 @@ export class ApiService {
 
   getPersonKnowsFor$(params: string, id: number): Observable<SearchCard[]> {
     return this.http.get<{ results: SearchPersonDTO[] }>(params).pipe(
-      map((data) => {
-        return data.results.find((person) => person.id === id);
+      map((data: { results: SearchPersonDTO[] }) => {
+        return data.results.find((person: SearchPersonDTO) => person.id === id);
       }),
       filter(Boolean),
       map((person) => {
@@ -188,6 +188,26 @@ export class ApiService {
 
   getGuestSession$(params: string): Observable<GuestSession> {
     return this.http.get<GuestSession>(params);
+  }
+
+  getRatedMoviesList$(params: string): Observable<MovieShortCard[]> {
+    return this.http.get<{ results: MovieDTO[] }>(params).pipe(
+      map((data: { results: MovieDTO[] }) => {
+        return data.results.map((result: MovieDTO) => {
+          return movieMapper(result);
+        });
+      }),
+    );
+  }
+
+  getRatedTvList$(params: string): Observable<MovieShortCard[]> {
+    return this.http.get<{ results: MovieDTO[] }>(params).pipe(
+      map((data: { results: MovieDTO[] }) => {
+        return data.results.map((result: MovieDTO) => {
+          return tvMapper(result);
+        });
+      }),
+    );
   }
 
   rateMovieOrTv$(params: string, rating: MovieRatingValue): Observable<MovieRating> {

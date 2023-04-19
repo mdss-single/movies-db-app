@@ -1,8 +1,8 @@
 <div *ngIf="details" class="movie">
     <div class="movie__bg">
         <img
-            [src]="details.picture | imagePath"
-            [srcset]="details.picture | imagePath: true"
+            [src]="details.bg | imagePath"
+            [srcset]="details.bg | imagePath: true"
             alt=""
             class="movie__bg-pic">
     </div>
@@ -39,8 +39,11 @@
                 </div>
             </div>
 
-            <div class="vote" *ngIf="isVoted; else rating">
-                <h3>Thanks for your vote!</h3>
+            <div class="vote" *ngIf="movieOrTvRating; else rating">
+                <strong>User Score:</strong>
+                <div class="vote__rating" [attr.style]="'--tmbd-rating-value: ' + (movieOrTvRating | rating)">
+                    {{ movieOrTvRating | rating }}%
+                </div>
             </div>
 
             <ng-template #rating>

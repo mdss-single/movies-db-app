@@ -2,7 +2,11 @@ import {
   DatePipe,
   NgIf
 } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ImagePathPipe } from '../../shared/pipes/image-path.pipe';
 
@@ -23,7 +27,8 @@ type PersonCard = {
     RouterLink,
     DatePipe
   ],
-  styleUrls: ['./person-card.component.scss']
+  styleUrls: ['./person-card.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PersonCardComponent {
   @Input() public person?: PersonCard;

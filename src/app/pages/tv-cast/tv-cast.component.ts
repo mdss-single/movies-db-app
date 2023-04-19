@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component
+} from '@angular/core';
 import { CastDetailsComponent } from '../../components/cast-details/cast-details.component';
 import { MediaType } from '../../shared/enums/media-types';
 
@@ -9,7 +12,8 @@ import { MediaType } from '../../shared/enums/media-types';
   imports: [
     CastDetailsComponent
   ],
-  styleUrls: ['./tv-cast.component.scss']
+  styleUrls: ['./tv-cast.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TvCastComponent {
   public pageType = MediaType;

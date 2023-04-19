@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component
+} from '@angular/core';
 import { MovieTvSelectorComponent } from '../../components/movie-tv-selector/movie-tv-selector.component';
 import { MediaType } from '../../shared/enums/media-types';
 
@@ -9,7 +12,8 @@ import { MediaType } from '../../shared/enums/media-types';
   imports: [
     MovieTvSelectorComponent
   ],
-  styleUrls: ['./tv.component.scss']
+  styleUrls: ['./tv.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TvComponent {
   public pageType = MediaType;

@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   Input
 } from '@angular/core';
@@ -9,9 +10,10 @@ import { CastCard } from '../../shared/interfaces/cast';
 @Component({
   selector: 'tmbd-person-cast',
   standalone: true,
-    imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink],
   templateUrl: './person-cast.component.html',
-  styleUrls: ['./person-cast.component.scss']
+  styleUrls: ['./person-cast.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PersonCastComponent {
   @Input() public castList?: CastCard[];
