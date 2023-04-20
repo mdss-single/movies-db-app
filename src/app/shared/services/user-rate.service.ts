@@ -20,25 +20,9 @@ import { LocalStorageService } from './local-storage.service';
   providedIn: 'root'
 })
 export class UserRateService {
-  // private _guestSession$ = new BehaviorSubject<string>('');
-  // private _guestRatedMovies$ = new BehaviorSubject<MovieShortCard[]>([]);
-  // private _guestRatedTv$ = new BehaviorSubject<MovieShortCard[]>([]);
-
   private _guestSession = '';
   private _guestRatedMovies = new Map();
   private _guestRatedTv = new Map();
-
-  // get guestSession(): string {
-  //   return this._guestSession$.value;
-  // }
-  //
-  // get guestRatedMovies(): MovieShortCard[] {
-  //   return this._guestRatedMovies$.value;
-  // }
-  //
-  // get guestRatedTv(): MovieShortCard[] {
-  //   return this._guestRatedTv$.value;
-  // }
 
   get guestSession(): string {
     return this._guestSession;
@@ -49,8 +33,6 @@ export class UserRateService {
       id,
       rating,
     }));
-
-    // return this._guestRatedMovies;
   }
 
   get guestRatedTv(): RatedCard[] {
@@ -58,8 +40,6 @@ export class UserRateService {
       id,
       rating,
     }));
-
-    // return this._guestRatedTv;
   }
 
   constructor(
@@ -114,7 +94,6 @@ export class UserRateService {
         movieList.forEach((movie: MovieShortCard) => {
           this._guestRatedMovies.set(movie.id, movie.rating);
         });
-        console.log(this._guestRatedMovies)
       }),
       switchMap((_) => {
         return this.apiService.getRatedTvList$(tvEndpoint);
@@ -122,9 +101,7 @@ export class UserRateService {
       tap((movieList: MovieShortCard[]) => {
         movieList.forEach((movie: MovieShortCard) => {
           this._guestRatedTv.set(movie.id, movie.rating);
-        })
-
-        console.log(this._guestRatedTv)
+        });
       }),
     )
   }
