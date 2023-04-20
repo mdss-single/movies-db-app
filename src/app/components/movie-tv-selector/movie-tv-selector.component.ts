@@ -42,7 +42,7 @@ import { MovieDetailsComponent } from '../movie-details/movie-details.component'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MovieTvSelectorComponent {
-  @Input() public pageType?: MediaType.Movie | MediaType.Tv;
+  @Input() public pageType: MediaType.Movie | MediaType.Tv = MediaType.Movie;
 
   private pageId$: Observable<string> = this.route.params.pipe(
     map(value => value['id']),

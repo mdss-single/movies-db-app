@@ -5,23 +5,23 @@ import {
 } from '@angular/common';
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   Input,
   OnDestroy,
   OnInit
 } from '@angular/core';
 import {
-  BehaviorSubject,
   Subscription,
   tap
 } from 'rxjs';
 import { ApiRequestType } from '../../shared/enums/api-request';
 import { LocalStorageKeys } from '../../shared/enums/local-storage';
 import { MediaType } from '../../shared/enums/media-types';
+import { RatedCard } from '../../shared/interfaces/general';
 import {
   MovieDetails,
   MovieRating,
-  MovieShortCard
 } from '../../shared/interfaces/movies';
 import { ImagePathPipe } from '../../shared/pipes/image-path.pipe';
 import { RatingPipe } from '../../shared/pipes/rating.pipe';
@@ -47,27 +47,27 @@ import { MovieRatingComponent } from '../movie-rating/movie-rating.component';
 })
 export class MovieDetailsComponent implements OnInit, OnDestroy {
   @Input() public details?: MovieDetails;
-  @Input() public pageType?: MediaType.Movie | MediaType.Tv;
+  @Input() public pageType: MediaType.Movie | MediaType.Tv = MediaType.Movie;
 
   private guestSessionValue = this.userRate.guestSession;
-  private ratedList = new BehaviorSubject<MovieShortCard[]>([]);
+  private ratedList: RatedCard[] = [];
   private rateSubscription!: Subscription;
-  private isUserTokenExist = this.localStorage.getItem(LocalStorageKeys.GuestSession);
   public userRating: number | null = null;
 
   constructor(
     private readonly apiService: ApiService,
     private readonly userRate: UserRateService,
-    private localStorage: LocalStorageService,
+    private readonly localStorage: LocalStorageService,
+    private readonly cdr: ChangeDetectorRef,
   ) {}
 
   public ngOnInit(): void {
-    if (!this.isUserTokenExist) {
+    if (!this.guestSessionValue) {
       return;
     }
 
-    this.ratedList.next(this.pageType === MediaType.Movie ?
-      this.userRate.guestRatedMovies : this.userRate.guestRatedTv)
+    this.ratedList = this.pageType === MediaType.Movie ?
+      this.userRate.guestRatedMovies : this.userRate.guestRatedTv;
     this.checkMovieRating();
   }
 
@@ -85,30 +85,31 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
 
     this.rateSubscription = this.apiService.rateMovieOrTv$(rateParams, rateValue)
       .pipe(
-        tap((value: MovieRating) => {
-          if (!this.isUserTokenExist) {
+        tap((_: MovieRating) => {
+          if (!this.guestSessionValue) {
             this.localStorage.setItem(LocalStorageKeys.GuestSession, this.guestSessionValue);
           }
 
-          // update rated list logic here
-          // this.ratedList.next(value);
+          this.userRate.updateRateList(this.pageType, this.details?.id ?? 0, rateValue.value);
           this.userRating = rateValue.value;
+          this.cdr.markForCheck();
         }),
       )
       .subscribe();
   }
 
   private checkMovieRating(): void {
-    if (!this.ratedList.value.length) {
+    if (!this.ratedList.length) {
       return;
     }
 
-    const currentMovieOrTv = this.ratedList.value.find((movieOrTv: MovieShortCard) => movieOrTv.id === this.details?.id);
+    const currentMovieOrTv = this.ratedList.find((movieOrTv: RatedCard) => movieOrTv.id === this.details?.id);
 
     if (!currentMovieOrTv) {
       return;
     }
 
     this.userRating = currentMovieOrTv.rating;
+    this.cdr.markForCheck();
   }
 }

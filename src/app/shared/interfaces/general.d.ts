@@ -13,3 +13,8 @@ export interface GuestSession {
   guest_session_id: string;
   expires_at: Date;
 }
+
+export interface RatedCard {
+  id: number;
+  rating: number;
+}
