@@ -39,16 +39,14 @@
                 </div>
             </div>
 
-            <div class="vote" *ngIf="movieOrTvRating; else rating">
-                <strong>User Score:</strong>
-                <div class="vote__rating" [attr.style]="'--tmbd-rating-value: ' + (movieOrTvRating | rating)">
-                    {{ movieOrTvRating | rating }}%
+            <div class="vote" *ngIf="userRating">
+                <strong>Your rate:</strong>
+                <div class="vote__rating" [attr.style]="'--tmbd-rating-value: ' + (userRating | rating)">
+                    {{ userRating | rating }}%
                 </div>
             </div>
 
-            <ng-template #rating>
-                <tmbd-movie-rating (movieRating)="rateMovieOrTv($event)"></tmbd-movie-rating>
-            </ng-template>
+            <tmbd-movie-rating (movieRating)="rateMovieOrTv($event)"></tmbd-movie-rating>
         </div>
     </div>
 </div>

@@ -13,7 +13,6 @@ import {
 import {
   BehaviorSubject,
   Subscription,
-  switchMap,
   tap
 } from 'rxjs';
 import { ApiRequestType } from '../../shared/enums/api-request';
@@ -54,7 +53,7 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
   private ratedList = new BehaviorSubject<MovieShortCard[]>([]);
   private rateSubscription!: Subscription;
   private isUserTokenExist = this.localStorage.getItem(LocalStorageKeys.GuestSession);
-  public movieOrTvRating: number | null = null;
+  public userRating: number | null = null;
 
   constructor(
     private readonly apiService: ApiService,
@@ -86,16 +85,14 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
 
     this.rateSubscription = this.apiService.rateMovieOrTv$(rateParams, rateValue)
       .pipe(
-        switchMap((_: MovieRating) => {
-          return this.userRate.getRatedList(this.pageType);
-        }),
-        tap((value: MovieShortCard[]) => {
+        tap((value: MovieRating) => {
           if (!this.isUserTokenExist) {
             this.localStorage.setItem(LocalStorageKeys.GuestSession, this.guestSessionValue);
           }
 
-          this.ratedList.next(value);
-          this.checkMovieRating();
+          // update rated list logic here
+          // this.ratedList.next(value);
+          this.userRating = rateValue.value;
         }),
       )
       .subscribe();
@@ -112,6 +109,6 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.movieOrTvRating = currentMovieOrTv.rating;
+    this.userRating = currentMovieOrTv.rating;
   }
 }

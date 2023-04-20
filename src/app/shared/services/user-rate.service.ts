@@ -8,7 +8,6 @@ import {
 } from 'rxjs';
 import { ApiRequestType } from '../enums/api-request';
 import { LocalStorageKeys } from '../enums/local-storage';
-import { MediaType } from '../enums/media-types';
 import { GuestSession } from '../interfaces/general';
 import { MovieShortCard } from '../interfaces/movies';
 import { ApiService } from './api.service';
@@ -18,9 +17,9 @@ import { LocalStorageService } from './local-storage.service';
   providedIn: 'root'
 })
 export class UserRateService {
-  public _guestSession$ = new BehaviorSubject<string>('');
-  public _guestRatedMovies$ = new BehaviorSubject<MovieShortCard[]>([]);
-  public _guestRatedTv$ = new BehaviorSubject<MovieShortCard[]>([]);
+  private _guestSession$ = new BehaviorSubject<string>('');
+  private _guestRatedMovies$ = new BehaviorSubject<MovieShortCard[]>([]);
+  private _guestRatedTv$ = new BehaviorSubject<MovieShortCard[]>([]);
 
   get guestSession(): string {
     return this._guestSession$.value;
@@ -55,20 +54,19 @@ export class UserRateService {
   }
 
   public setSessionAndRateList(sessionId: string): Observable<MovieShortCard[]> {
+    const guestSession = this.localStorage.getItem(LocalStorageKeys.GuestSession);
+    if (!guestSession) {
+      this.localStorage.setItem(LocalStorageKeys.GuestSession, sessionId);
+    }
+
     this._guestSession$.next(sessionId);
     return this.getRatedList();
   }
 
-  public getRatedList(mediaType?: MediaType): Observable<MovieShortCard[]> {
+  public getRatedList(): Observable<MovieShortCard[]> {
     const sessionId = this.guestSession;
     const moviesEndpoint = ApiRequestType.RatedMoviesPrefix + sessionId + ApiRequestType.RatedMoviesTail;
     const tvEndpoint = ApiRequestType.RatedTvPrefix + sessionId + ApiRequestType.RatedTvTail;
-
-    if (mediaType) {
-      return mediaType === MediaType.Movie ?
-        this.apiService.getRatedMoviesList$(moviesEndpoint) :
-        this.apiService.getRatedTvList$(tvEndpoint);
-    }
 
     return this.apiService.getRatedMoviesList$(moviesEndpoint).pipe(
       take(1),
