@@ -63,17 +63,17 @@ export class UserRateService {
   }
 
   public updateRateList(type: MediaType, id: number, rating: number): void {
-    const list = type === MediaType.Movie ?
+    const rateList = type === MediaType.Movie ?
       this.guestRatedMovies : this.guestRatedTv;
 
-    const itemExist = list.find((item) => item.id === id);
+    const itemInRateList = rateList.find((item: RatedCard) => item.id === id);
 
-    if (itemExist) {
-      itemExist.rating = rating;
+    if (itemInRateList) {
+      itemInRateList.rating = rating;
       return;
     }
 
-    list.push({ id, rating });
+    rateList.push({ id, rating });
   }
 
   private setSessionAndRateList(sessionId: string): Observable<RatedCard[]> {
