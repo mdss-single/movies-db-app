@@ -12,21 +12,16 @@ import {
   OnInit
 } from '@angular/core';
 import {
+  BehaviorSubject,
   Subscription,
+  take,
   tap
 } from 'rxjs';
-import { ApiRequestType } from '../../shared/enums/api-request';
-import { LocalStorageKeys } from '../../shared/enums/local-storage';
 import { MediaType } from '../../shared/enums/media-types';
-import { RatedCard } from '../../shared/interfaces/general';
-import {
-  MovieDetails,
-  MovieRating,
-} from '../../shared/interfaces/movies';
+import { MovieDetails } from '../../shared/interfaces/movies';
 import { ImagePathPipe } from '../../shared/pipes/image-path.pipe';
 import { RatingPipe } from '../../shared/pipes/rating.pipe';
 import { ApiService } from '../../shared/services/api.service';
-import { LocalStorageService } from '../../shared/services/local-storage.service';
 import { UserRateService } from '../../shared/services/user-rate.service';
 import { MovieRatingComponent } from '../movie-rating/movie-rating.component';
 
@@ -49,26 +44,28 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
   @Input() public details?: MovieDetails;
   @Input() public pageType: MediaType.Movie | MediaType.Tv = MediaType.Movie;
 
-  private guestSessionValue = this.userRate.guestSession;
-  private ratedList: RatedCard[] = [];
   private rateSubscription!: Subscription;
-  public userRating: number | null = null;
+  public userRating = new BehaviorSubject<number | undefined>(undefined);
 
   constructor(
     private readonly apiService: ApiService,
-    private readonly userRate: UserRateService,
-    private readonly localStorage: LocalStorageService,
+    private readonly userRateService: UserRateService,
     private readonly cdr: ChangeDetectorRef,
   ) {}
 
   public ngOnInit(): void {
-    if (!this.guestSessionValue) {
+    if (!this.details?.id) {
       return;
     }
 
-    this.ratedList = this.pageType === MediaType.Movie ?
-      this.userRate.guestRatedMovies : this.userRate.guestRatedTv;
-    this.checkMovieRating();
+    const userRatingValue = this.userRateService.getRatedList(this.pageType, this.details.id);
+
+    if (!userRatingValue) {
+      return;
+    }
+
+    this.userRating.next(userRatingValue);
+    this.cdr.markForCheck();
   }
 
   public ngOnDestroy(): void {
@@ -78,38 +75,16 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
   }
 
   public rateMovieOrTv(rating: number): void {
-    const rateParams = `${this.pageType}/${this.details?.id}/${ApiRequestType.Rating + this.guestSessionValue}`;
-    const rateValue = {
-      value: rating,
-    };
-
-    this.rateSubscription = this.apiService.rateMovieOrTv$(rateParams, rateValue)
-      .pipe(
-        tap((_: MovieRating) => {
-          if (!this.guestSessionValue) {
-            this.localStorage.setItem(LocalStorageKeys.GuestSession, this.guestSessionValue);
-          }
-
-          this.userRate.updateRateList(this.pageType, this.details?.id ?? 0, rateValue.value);
-          this.userRating = rateValue.value;
-          this.cdr.markForCheck();
-        }),
-      )
-      .subscribe();
-  }
-
-  private checkMovieRating(): void {
-    if (!this.ratedList.length) {
+    if (!this.details?.id) {
       return;
     }
 
-    const currentMovieOrTv = this.ratedList.find((movieOrTv: RatedCard) => movieOrTv.id === this.details?.id);
-
-    if (!currentMovieOrTv) {
-      return;
-    }
-
-    this.userRating = currentMovieOrTv.rating;
-    this.cdr.markForCheck();
+    this.userRateService.setRate$(this.pageType, this.details.id, rating).pipe(
+      take(1),
+      tap((_) => {
+        this.userRating.next(rating);
+        this.cdr.markForCheck();
+      }),
+    ).subscribe();
   }
 }

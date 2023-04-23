@@ -39,10 +39,10 @@
                 </div>
             </div>
 
-            <div class="vote" *ngIf="userRating">
+            <div class="vote" *ngIf="userRating.value">
                 <strong>Your rate:</strong>
-                <div class="vote__rating" [attr.style]="'--tmbd-rating-value: ' + (userRating | rating)">
-                    {{ userRating | rating }}%
+                <div class="vote__rating" [attr.style]="'--tmbd-rating-value: ' + (userRating.value | rating)">
+                    {{ userRating.value | rating }}%
                 </div>
             </div>
 

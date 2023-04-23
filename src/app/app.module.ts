@@ -48,7 +48,7 @@ import { ImageConfigService } from './shared/services/image-config.service';
     },
     {
       provide: APP_INITIALIZER,
-      useFactory: (userRate: UserRateService) => () => userRate.init(),
+      useFactory: (userRateService: UserRateService) => () => userRateService.init(),
       multi: true,
       deps: [UserRateService]
     },

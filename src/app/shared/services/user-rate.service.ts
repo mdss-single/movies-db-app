@@ -1,108 +1,119 @@
 import { Injectable } from '@angular/core';
 import {
+  combineLatest,
   Observable,
   switchMap,
   take,
   tap
 } from 'rxjs';
 import { ApiRequestType } from '../enums/api-request';
-import { LocalStorageKeys } from '../enums/local-storage';
 import { MediaType } from '../enums/media-types';
 import {
   GuestSession,
   RatedCard
 } from '../interfaces/general';
-import { MovieShortCard } from '../interfaces/movies';
+import {
+  MovieRating,
+  MovieShortCard
+} from '../interfaces/movies';
 import { ApiService } from './api.service';
+import { GuestSessionService } from './guest-session.service';
 import { LocalStorageService } from './local-storage.service';
+
+type RatedList = Map<number, number>;
+type Rating = number;
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserRateService {
-  private _guestSession = '';
-  private _guestRatedMovies = new Map();
-  private _guestRatedTv = new Map();
+  private guestSession = '';
+  private _guestRatedMovies: RatedList = new Map();
+  private _guestRatedTv: RatedList = new Map();
 
-  get guestSession(): string {
-    return this._guestSession;
+  get guestRatedMovies(): RatedList {
+    return this._guestRatedMovies;
   }
 
-  get guestRatedMovies(): RatedCard[] {
-    return Array.from(this._guestRatedMovies).map(([id, rating]) => ({
-      id,
-      rating,
-    }));
-  }
-
-  get guestRatedTv(): RatedCard[] {
-    return Array.from(this._guestRatedTv).map(([id, rating]) => ({
-      id,
-      rating,
-    }));
+  get guestRatedTv(): RatedList {
+    return this._guestRatedTv;
   }
 
   constructor(
     private apiService: ApiService,
     private localStorage: LocalStorageService,
+    private guestSessionService: GuestSessionService,
   ) {}
 
-  public init(): Observable<GuestSession> | Observable<RatedCard[]> {
-    const guestSessionInStorage = this.localStorage.getItem(LocalStorageKeys.GuestSession);
+  public init(): void | Observable<RatedCard[]> {
+    this.guestSessionService.getGuestSession$().pipe(
+      take(1),
+      tap((session: GuestSession) => this.guestSession = session.guest_session_id),
+      switchMap((session: GuestSession) => this.getRatedList$(session.guest_session_id))
+    ).subscribe();
+  }
 
-    if (guestSessionInStorage) {
-      return this.setSessionAndRateList(guestSessionInStorage);
+  public getRatedList(type: MediaType, id: number): Rating | undefined {
+    if (type === MediaType.Movie) {
+      return this.guestRatedMovies.get(id);
     }
 
-    return this.apiService.getGuestSession$(ApiRequestType.GuestSession).pipe(
-      take(1),
-      tap((value) => {
-        this.setSessionAndRateList(value.guest_session_id);
-      }),
-    );
+    return this.guestRatedTv.get(id);
+  }
+
+  public setRate$(type: MediaType, id: number, rating: number): Observable<MovieRating> {
+    const rateParams = `${type}/${id}/${ApiRequestType.Rating + this.guestSession}`;
+    const rateValue = {
+      value: rating,
+    };
+
+    return this.apiService.rateMovieOrTv$(rateParams, rateValue)
+      .pipe(
+        tap((_: MovieRating) => {
+          if (!this.guestSessionService.guestSessionInStorage) {
+            this.guestSessionService.saveGuestSessionInStorage();
+          }
+
+          this.updateRateList(type, id, rating);
+        }),
+      );
   }
 
   public updateRateList(type: MediaType, id: number, rating: number): void {
-    const rateList = type === MediaType.Movie ?
-      this.guestRatedMovies : this.guestRatedTv;
-
-    const itemInRateList = rateList.find((item: RatedCard) => item.id === id);
-
-    if (itemInRateList) {
-      itemInRateList.rating = rating;
+    if (type === MediaType.Movie) {
+      this.updateRatedMovieList(id, rating);
       return;
     }
 
-    rateList.push({ id, rating });
+    this.updateRatedTvList(id, rating);
   }
 
-  private setSessionAndRateList(sessionId: string): Observable<RatedCard[]> {
-    this.localStorage.setItem(LocalStorageKeys.GuestSession, sessionId);
-    this._guestSession = sessionId;
-
-    return this.getRatedList();
+  private updateRatedMovieList(id: number, value: number): void {
+    this.guestRatedMovies.set(id, value);
   }
 
-  private getRatedList(): Observable<RatedCard[]> {
-    const sessionId = this.guestSession;
+  private updateRatedTvList(id: number, value: number): void {
+    this.guestRatedTv.set(id, value);
+  }
+
+  private getRatedList$(sessionId: string): Observable<RatedCard[]> | any {
     const moviesEndpoint = ApiRequestType.RatedMoviesPrefix + sessionId + ApiRequestType.RatedMoviesTail;
     const tvEndpoint = ApiRequestType.RatedTvPrefix + sessionId + ApiRequestType.RatedTvTail;
 
-    return this.apiService.getRatedMoviesList$(moviesEndpoint).pipe(
+    const movieList$ = this.apiService.getRatedMoviesList$(moviesEndpoint);
+    const tvList$ = this.apiService.getRatedTvList$(tvEndpoint);
+
+    return combineLatest([movieList$, tvList$]).pipe(
       take(1),
-      tap((movieList: MovieShortCard[]) => {
+      tap(([movieList, tvList]) => {
         movieList.forEach((movie: MovieShortCard) => {
-          this._guestRatedMovies.set(movie.id, movie.rating);
+          this.updateRatedMovieList(movie.id, movie.rating);
         });
-      }),
-      switchMap((_) => {
-        return this.apiService.getRatedTvList$(tvEndpoint);
-      }),
-      tap((movieList: MovieShortCard[]) => {
-        movieList.forEach((movie: MovieShortCard) => {
-          this._guestRatedTv.set(movie.id, movie.rating);
+
+        tvList.forEach((tv: MovieShortCard) => {
+          this.updateRatedTvList(tv.id, tv.rating);
         });
-      }),
-    )
+      })
+    );
   }
 }
