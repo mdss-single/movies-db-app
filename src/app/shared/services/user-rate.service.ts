@@ -141,13 +141,13 @@ export class UserRateService {
     this._guestRatedMovies.next(tvList);
   }
 
-  private setRatedMovieList(movies: MovieRatingCard[]): void {
-    const mappedMovies = new Map(movies.map((movie: MovieRatingCard) => ([movie.id, movie.rating])));
+  private setRatedMovieList(movieList: MovieRatingCard[]): void {
+    const mappedMovies = new Map(movieList.map(({id, rating}: MovieRatingCard) => [id, rating]));
     this._guestRatedMovies.next(mappedMovies);
   }
 
-  private setRatedTvList(movies: MovieRatingCard[]): void {
-    const mappedMovies = new Map(movies.map((movie: MovieRatingCard) => ([movie.id, movie.rating])));
-    this._guestRatedTv.next(mappedMovies);
+  private setRatedTvList(tvList: MovieRatingCard[]): void {
+    const mappedTv = new Map(tvList.map(({id, rating}: MovieRatingCard) => [id, rating]));
+    this._guestRatedTv.next(mappedTv);
   }
 }

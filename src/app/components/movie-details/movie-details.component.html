@@ -39,6 +39,13 @@
                 </div>
             </div>
 
+            <div class="vote" *ngIf="details.rating">
+                <strong>Average rate:</strong>
+                <div class="vote__rating" [attr.style]="'--tmbd-rating-value: ' + (details.rating | rating)">
+                    {{ details.rating | rating }}%
+                </div>
+            </div>
+
             <div class="vote" *ngIf="(userRating$ | async) as userRating">
                 <strong>Your rate:</strong>
                 <div class="vote__rating" [attr.style]="'--tmbd-rating-value: ' + (userRating | rating)">
