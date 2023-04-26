@@ -1,0 +1,25 @@
+<div class="container" *ngIf="(peopleData$ | async) as peopleData; else loading">
+    <div class="grid">
+        <ng-container *ngFor="let person of peopleData.results">
+            <tmbd-person-card
+                *ngIf="mapPersonData(person) as mappedPerson"
+                [person]="{
+                    id: mappedPerson.id,
+                    name: mappedPerson.name,
+                    poster: mappedPerson.profile_path
+                }">
+            </tmbd-person-card>
+        </ng-container>
+    </div>
+
+    <tmbd-pagination
+        [currentPage]="peopleData.page"
+        [totalPages]="peopleData.total_pages"
+        (pageChange)="loadNewPage($event)"></tmbd-pagination>
+</div>
+
+<ng-template #loading>
+    <div class="container">
+        Loading ...
+    </div>
+</ng-template>

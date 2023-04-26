@@ -1,0 +1,28 @@
+.pagination {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px;
+
+    &__item {
+        flex-shrink: 0;
+        padding: 5px 10px;
+        min-width: 40px;
+        color: rgb(var(--white));
+        background-color: rgb(var(--accountBlue));
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: var(--transitionTime);
+        transition-property: opacity, background-color;
+    }
+
+    &__item.active {
+        background-color: rgb(var(--accountGreen));
+    }
+
+    &__item:disabled {
+        opacity: 0.6;
+        cursor: default;
+    }
+}

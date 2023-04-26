@@ -12,4 +12,5 @@ export enum ApiRequestType {
   SearchPerson = 'search/person?query=',
   Rating = 'rating?guest_session_id=',
   GuestSession = 'authentication/guest_session/new',
+  PersonList = 'person/popular?page=',
 }

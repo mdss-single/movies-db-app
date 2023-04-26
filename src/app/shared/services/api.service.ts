@@ -46,7 +46,8 @@ import {
 } from '../interfaces/movies';
 import {
   PersonDetails,
-  PersonDTO
+  PersonDTO,
+  PersonListDTO
 } from '../interfaces/person';
 import {
   SearchCard,
@@ -192,5 +193,9 @@ export class ApiService {
 
   rateMovieOrTv$(params: string, rating: MovieRatingValue): Observable<MovieRating> {
     return this.http.post<MovieRating>(params, rating);
+  }
+
+  getPeopleList$(params: string): Observable<PersonListDTO> {
+    return this.http.get<PersonListDTO>(params);
   }
 }
