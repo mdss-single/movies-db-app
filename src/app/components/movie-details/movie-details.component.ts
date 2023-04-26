@@ -1,24 +1,26 @@
 import {
+  AsyncPipe,
   DatePipe,
   NgForOf,
   NgIf
 } from '@angular/common';
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   Input,
   OnDestroy,
   OnInit
 } from '@angular/core';
 import {
-  BehaviorSubject,
+  Observable,
   Subscription,
-  take,
   tap
 } from 'rxjs';
 import { MediaType } from '../../shared/enums/media-types';
-import { MovieDetails } from '../../shared/interfaces/movies';
+import {
+  MovieDetails,
+  MovieRating
+} from '../../shared/interfaces/movies';
 import { ImagePathPipe } from '../../shared/pipes/image-path.pipe';
 import { RatingPipe } from '../../shared/pipes/rating.pipe';
 import { ApiService } from '../../shared/services/api.service';
@@ -34,7 +36,8 @@ import { MovieRatingComponent } from '../movie-rating/movie-rating.component';
     NgForOf,
     DatePipe,
     MovieRatingComponent,
-    RatingPipe
+    RatingPipe,
+    AsyncPipe
   ],
   templateUrl: './movie-details.component.html',
   styleUrls: ['./movie-details.component.scss'],
@@ -44,13 +47,12 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
   @Input() public details?: MovieDetails;
   @Input() public pageType: MediaType.Movie | MediaType.Tv = MediaType.Movie;
 
-  private rateSubscription!: Subscription;
-  public userRating = new BehaviorSubject<number | undefined>(undefined);
+  private rateSubscription: Subscription | undefined;
+  public userRating$: Observable<number | undefined> | undefined;
 
   constructor(
     private readonly apiService: ApiService,
     private readonly userRateService: UserRateService,
-    private readonly cdr: ChangeDetectorRef,
   ) {}
 
   public ngOnInit(): void {
@@ -58,14 +60,7 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const userRatingValue = this.userRateService.getRatedList(this.pageType, this.details.id);
-
-    if (!userRatingValue) {
-      return;
-    }
-
-    this.userRating.next(userRatingValue);
-    this.cdr.markForCheck();
+    this.userRating$ = this.userRateService.getRatingValue$(this.pageType, this.details.id);
   }
 
   public ngOnDestroy(): void {
@@ -79,11 +74,9 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.userRateService.setRate$(this.pageType, this.details.id, rating).pipe(
-      take(1),
-      tap((_) => {
-        this.userRating.next(rating);
-        this.cdr.markForCheck();
+    this.rateSubscription = this.userRateService.setRate$(this.pageType, this.details.id, rating).pipe(
+      tap((_: MovieRating) => {
+        // this.userRating.next(rating);
       }),
     ).subscribe();
   }

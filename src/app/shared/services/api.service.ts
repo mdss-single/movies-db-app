@@ -22,6 +22,7 @@ import {
   searchTvMapper,
   tvMapper
 } from '../helpers';
+import { ratingMovieMapper } from '../helpers/rating-movie-tv.mapper';
 import {
   CastAndCrew,
   CastAndCrewResultDTO,
@@ -40,6 +41,7 @@ import {
   MovieDetailsOptions,
   MovieDTO,
   MovieRating,
+  MovieRatingCard,
   MovieRatingValue,
   MovieShortCard,
   TvDTO
@@ -190,21 +192,21 @@ export class ApiService {
     return this.http.get<GuestSession>(params);
   }
 
-  getRatedMoviesList$(params: string): Observable<MovieShortCard[]> {
+  getRatedMoviesList$(params: string): Observable<MovieRatingCard[]> {
     return this.http.get<{ results: MovieDTO[] }>(params).pipe(
       map((data: { results: MovieDTO[] }) => {
         return data.results.map((result: MovieDTO) => {
-          return movieMapper(result);
+          return ratingMovieMapper(result);
         });
       }),
     );
   }
 
-  getRatedTvList$(params: string): Observable<MovieShortCard[]> {
+  getRatedTvList$(params: string): Observable<MovieRatingCard[]> {
     return this.http.get<{ results: MovieDTO[] }>(params).pipe(
       map((data: { results: MovieDTO[] }) => {
         return data.results.map((result: MovieDTO) => {
-          return tvMapper(result);
+          return ratingMovieMapper(result);
         });
       }),
     );
