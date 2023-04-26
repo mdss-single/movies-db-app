@@ -35,7 +35,7 @@ export class PaginationComponent {
   }
 
   public get pages(): PaginationList {
-    return [...Array(this.lastPageInList + 1).keys()].slice(1);
+    return new Array(this.lastPageInList);
   }
 
   public get pagesShiftBefore(): boolean {
