@@ -27,6 +27,10 @@ const routes: Routes = [
     loadComponent: () => import('./pages/tv-cast/tv-cast.component').then(mod => mod.TvCastComponent)
   },
   {
+    path: 'peoples',
+    loadComponent: () => import('./pages/person-list/person-list.component').then(mod => mod.PersonListComponent)
+  },
+  {
     path: '**',
     loadComponent: () => import('./pages/not-found/not-found.component').then(mod => mod.NotFoundComponent)
   },

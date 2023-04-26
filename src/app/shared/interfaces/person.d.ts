@@ -1,3 +1,8 @@
+import {
+  MovieDTO,
+  TvDTO
+} from './movies';
+
 export interface PersonDTO {
   birthday?:             Date;
   known_for_department?: string;
@@ -13,6 +18,22 @@ export interface PersonDTO {
   adult?:                boolean;
   imdb_id?:              string;
   homepage?:             null;
+}
+
+export interface PersonListDTO {
+  page:          number;
+  results:       PersonInfoResult[];
+  total_results: number;
+  total_pages:   number;
+}
+
+export interface PersonInfoResult {
+  profile_path: string;
+  adult?:        boolean;
+  id:           number;
+  known_for?:    MovieDTO[] | TvDTO[];
+  name:         string;
+  popularity?:   number;
 }
 
 export interface PersonDetails {

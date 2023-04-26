@@ -1,0 +1,25 @@
+<div class="pagination">
+    <button
+        class="pagination__item"
+        (click)="previousClick()"
+        [disabled]="currentPage === 1">
+        &laquo; Previous
+    </button>
+
+    <span *ngIf="pagesShiftBefore">...</span>
+
+    <button
+        *ngFor="let page of pagesList"
+        class="pagination__item"
+        [class.active]="page === currentPage"
+        (click)="onPageClick(page)">{{ page }}</button>
+
+    <span *ngIf="pagesShiftAfter">...</span>
+
+    <button
+        class="pagination__item"
+        (click)="nextClick()"
+        [disabled]="currentPage === totalPages">
+        Next &raquo;
+    </button>
+</div>
