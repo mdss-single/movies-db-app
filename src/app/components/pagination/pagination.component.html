@@ -9,7 +9,7 @@
     <span *ngIf="pagesShiftBefore">...</span>
 
     <button
-        *ngFor="let page of pagesList"
+        *ngFor="let page of pages"
         class="pagination__item"
         [class.active]="page === currentPage"
         (click)="onPageClick(page)">{{ page }}</button>
