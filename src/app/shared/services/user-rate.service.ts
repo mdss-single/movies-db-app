@@ -61,7 +61,7 @@ export class UserRateService {
       return this.getRatedTv(id);
     }
 
-    throw new Error('No item by this id');
+    throw new Error('No item by this media type');
   }
 
   public setRate$(type: MediaType, id: number, rating: number): Observable<MovieRating> {

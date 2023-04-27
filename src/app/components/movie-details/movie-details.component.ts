@@ -14,13 +14,9 @@ import {
 import {
   Observable,
   Subscription,
-  tap
 } from 'rxjs';
 import { MediaType } from '../../shared/enums/media-types';
-import {
-  MovieDetails,
-  MovieRating
-} from '../../shared/interfaces/movies';
+import { MovieDetails } from '../../shared/interfaces/movies';
 import { ImagePathPipe } from '../../shared/pipes/image-path.pipe';
 import { RatingPipe } from '../../shared/pipes/rating.pipe';
 import { ApiService } from '../../shared/services/api.service';
@@ -47,7 +43,7 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
   @Input() public details?: MovieDetails;
   @Input() public pageType: MediaType.Movie | MediaType.Tv = MediaType.Movie;
 
-  private rateSubscription: Subscription | undefined;
+  private setRateSubscription: Subscription | undefined;
   public userRating$: Observable<number | undefined> | undefined;
 
   constructor(
@@ -64,8 +60,8 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    if (this.rateSubscription) {
-      this.rateSubscription.unsubscribe();
+    if (this.setRateSubscription) {
+      this.setRateSubscription.unsubscribe();
     }
   }
 
@@ -74,10 +70,6 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.rateSubscription = this.userRateService.setRate$(this.pageType, this.details.id, rating).pipe(
-      tap((_: MovieRating) => {
-        // this.userRating.next(rating);
-      }),
-    ).subscribe();
+    this.setRateSubscription = this.userRateService.setRate$(this.pageType, this.details.id, rating).subscribe();
   }
 }
