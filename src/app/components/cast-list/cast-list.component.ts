@@ -4,6 +4,7 @@ import {
   NgTemplateOutlet
 } from '@angular/common';
 import {
+  ChangeDetectionStrategy,
   Component,
   Input
 } from '@angular/core';
@@ -22,7 +23,8 @@ import { ScrollerComponent } from '../scroller/scroller.component';
     NgIf,
     NgTemplateOutlet
   ],
-  styleUrls: ['./cast-list.component.scss']
+  styleUrls: ['./cast-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CastListComponent {
   @Input() public castList?: CastCard[];

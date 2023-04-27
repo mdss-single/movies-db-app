@@ -4,6 +4,7 @@ import {
   NgIf
 } from '@angular/common';
 import {
+  ChangeDetectionStrategy,
   Component,
   Input
 } from '@angular/core';
@@ -30,10 +31,11 @@ import { CastListComponent } from '../cast-list/cast-list.component';
   standalone: true,
   imports: [ImagePathPipe, CastListComponent, AsyncPipe, NgIf, RouterLink, DatePipe],
   templateUrl: './cast-details.component.html',
-  styleUrls: ['./cast-details.component.scss']
+  styleUrls: ['./cast-details.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CastDetailsComponent {
-  @Input() public pageType: MediaType.Movie | MediaType.Tv = MediaType.Movie;
+  @Input() public pageType?: MediaType.Movie | MediaType.Tv;
 
   public pageId$: Observable<string> = this.route.params.pipe(
     map(value => value['id']),

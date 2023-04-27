@@ -5,7 +5,10 @@ import {
   NgIf,
   NgTemplateOutlet
 } from '@angular/common';
-import { Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component
+} from '@angular/core';
 import {
   ActivatedRoute,
   RouterLink
@@ -53,7 +56,8 @@ type PersonDetailsWithKnowFor = {
         PersonCastComponent
     ],
   templateUrl: './person.component.html',
-  styleUrls: ['./person.component.scss']
+  styleUrls: ['./person.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PersonComponent {
   private personId$: Observable<string> = this.route.params.pipe(

@@ -1,8 +1,8 @@
 <div *ngIf="details" class="movie">
     <div class="movie__bg">
         <img
-            [src]="details.picture | imagePath"
-            [srcset]="details.picture | imagePath: true"
+            [src]="details.bg | imagePath"
+            [srcset]="details.bg | imagePath: true"
             alt=""
             class="movie__bg-pic">
     </div>
@@ -39,13 +39,21 @@
                 </div>
             </div>
 
-            <div class="vote" *ngIf="isVoted; else rating">
-                <h3>Thanks for your vote!</h3>
+            <div class="vote" *ngIf="details.rating">
+                <strong>Average rate:</strong>
+                <div class="vote__rating" [attr.style]="'--tmbd-rating-value: ' + (details.rating | rating)">
+                    {{ details.rating | rating }}%
+                </div>
             </div>
 
-            <ng-template #rating>
-                <tmbd-movie-rating (movieRating)="rateMovieOrTv($event)"></tmbd-movie-rating>
-            </ng-template>
+            <div class="vote" *ngIf="(userRating$ | async) as userRating">
+                <strong>Your rate:</strong>
+                <div class="vote__rating" [attr.style]="'--tmbd-rating-value: ' + (userRating | rating)">
+                    {{ userRating | rating }}%
+                </div>
+            </div>
+
+            <tmbd-movie-rating (movieRating)="rateMovieOrTv($event)"></tmbd-movie-rating>
         </div>
     </div>
 </div>

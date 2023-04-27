@@ -1,3 +1,5 @@
+@use 'design' as *;
+
 .movie {
     position: relative;
     padding: 50px 0;
@@ -26,13 +28,12 @@
     &__container {
         position: relative;
         display: grid;
-        grid-template-areas: "picture general" "main main";
+        grid-template-columns: max-content 1fr;
         grid-gap: 20px;
         color: rgb(var(--white));
     }
 
     &__picture {
-        grid-area: picture;
         width: 300px;
     }
 
@@ -42,7 +43,6 @@
     }
 
     &__general {
-        grid-area: general;
         display: flex;
         flex-direction: column;
         gap: 20px;
@@ -61,5 +61,35 @@
         display: grid;
         grid-template-columns: 1fr 250px;
         margin-top: 40px;
+    }
+}
+
+.vote {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    &__rating {
+        @include typo('small');
+
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        background-color: rgb(var(--black));
+        border-radius: 50%;
+        overflow: hidden;
+        color: rgb(var(--white));
+
+        &::before {
+            position: absolute;
+            inset: 0;
+            background-color: rgb(var(--scrollerGrey));
+            background-image: conic-gradient(rgb(var(--accountGreen)) calc(var(--tmbd-rating-value) * 1%), transparent 0);
+            mask-image: radial-gradient(50% 50%, transparent calc(100% - 3px), rgb(var(--black)) calc(100% - 2px), rgb(var(--black)));
+            content: '';
+        }
     }
 }

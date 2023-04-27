@@ -3,7 +3,11 @@ import {
   DatePipe,
   NgIf
 } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ImagePathPipe } from '../../shared/pipes/image-path.pipe';
 import { RatingPipe } from '../../shared/pipes/rating.pipe';
@@ -18,9 +22,9 @@ type MovieCard = {
 }
 
 @Component({
-    selector: 'tmbd-movie-card',
-    standalone: true,
-    templateUrl: './movie-card.component.html',
+  selector: 'tmbd-movie-card',
+  standalone: true,
+  templateUrl: './movie-card.component.html',
   imports: [
     RouterLink,
     DatePipe,
@@ -29,7 +33,8 @@ type MovieCard = {
     NgIf,
     RatingPipe
   ],
-    styleUrls: ['./movie-card.component.scss']
+  styleUrls: ['./movie-card.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MovieCardComponent {
   @Input() public card?: MovieCard;

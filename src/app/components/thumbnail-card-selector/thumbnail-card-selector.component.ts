@@ -1,5 +1,9 @@
 import { NgIf } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MediaType } from '../../shared/enums/media-types';
 import { SearchCard } from '../../shared/interfaces/search';
@@ -15,7 +19,8 @@ import { PersonCardComponent } from '../person-card/person-card.component';
     NgIf,
     PersonCardComponent,
     RouterLink
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ThumbnailCardSelectorComponent {
   public cardType = MediaType;

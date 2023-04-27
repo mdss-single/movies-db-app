@@ -3,7 +3,10 @@ import {
   NgForOf,
   NgIf
 } from '@angular/common';
-import { Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component
+} from '@angular/core';
 import {
   FormControl,
   FormsModule,
@@ -46,7 +49,8 @@ import { ApiService } from '../../shared/services/api.service';
     FilterPipe
   ],
   templateUrl: './entrance.component.html',
-  styleUrls: ['./entrance.component.scss']
+  styleUrls: ['./entrance.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EntranceComponent {
   private readonly minSearchSymbol = 2;

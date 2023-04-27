@@ -23,6 +23,7 @@ export interface MediaDTO {
   video?:                 boolean;
   vote_average?:          number;
   vote_count?:            number;
+  rating?:                number;
 }
 
 export interface MovieDTO extends MediaDTO {
@@ -54,6 +55,11 @@ export interface MovieDetails {
   picture: string;
   date: Date;
   genres: Genre[];
+  rating: number;
+}
+
+export interface MovieRatingCard {
+  id: number;
   rating: number;
 }
 

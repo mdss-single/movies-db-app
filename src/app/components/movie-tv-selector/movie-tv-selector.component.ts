@@ -3,6 +3,7 @@ import {
   NgIf
 } from '@angular/common';
 import {
+  ChangeDetectionStrategy,
   Component,
   Input
 } from '@angular/core';
@@ -38,6 +39,7 @@ import { MovieDetailsComponent } from '../movie-details/movie-details.component'
     CastListComponent,
     MovieDetailsComponent
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MovieTvSelectorComponent {
   @Input() public pageType: MediaType.Movie | MediaType.Tv = MediaType.Movie;

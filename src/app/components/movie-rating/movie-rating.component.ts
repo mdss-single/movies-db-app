@@ -3,6 +3,7 @@ import {
   NgIf
 } from '@angular/common';
 import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Output
@@ -16,7 +17,8 @@ import {
     NgIf,
     NgForOf
   ],
-  styleUrls: ['./movie-rating.component.scss']
+  styleUrls: ['./movie-rating.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MovieRatingComponent {
   @Output() public movieRating = new EventEmitter<number>();
