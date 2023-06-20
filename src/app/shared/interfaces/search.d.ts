@@ -25,12 +25,12 @@ export interface SearchCardDTO {
 }
 
 export interface SearchCard {
-  id: number;
-  title: string;
-  poster: string;
-  type: MediaType;
+  id:      number;
+  title:   string;
+  poster:  string;
+  type:    MediaType;
   rating?: number;
-  date?: Date;
+  date?:   Date;
 }
 
 export interface SearchPersonDTO {
@@ -40,4 +40,11 @@ export interface SearchPersonDTO {
   profile_path?: string | null;
   adult?:        boolean;
   popularity:    number;
+}
+
+export interface SearchParams {
+  sort:     string;
+  dateFrom: string;
+  dateTo:   string;
+  genres:   number[];
 }

@@ -91,8 +91,8 @@ export class UserRateService {
     const moviesEndpoint = ApiRequestType.RatedMoviesPrefix + sessionId + ApiRequestType.RatedMoviesTail;
     const tvEndpoint = ApiRequestType.RatedTvPrefix + sessionId + ApiRequestType.RatedTvTail;
 
-    const movieList$ = this.apiService.getRatedMoviesList$(moviesEndpoint);
-    const tvList$ = this.apiService.getRatedTvList$(tvEndpoint);
+    const movieList$ = this.apiService.getRatedMoviesOrTvList$(moviesEndpoint);
+    const tvList$ = this.apiService.getRatedMoviesOrTvList$(tvEndpoint);
 
     return combineLatest([movieList$, tvList$]).pipe(
       take(1),
