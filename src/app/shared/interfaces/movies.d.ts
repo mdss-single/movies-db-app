@@ -97,3 +97,8 @@ export interface MovieRating {
 export interface MovieRatingValue {
   value: number;
 }
+
+export interface MovieTvGenre {
+  id:   number;
+  name: string;
+}

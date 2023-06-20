@@ -5,6 +5,7 @@ import {
   map,
   Observable,
 } from 'rxjs';
+import { ApiRequestType } from '../enums/api-request';
 import { MediaType } from '../enums/media-types';
 import { isMovieCastGuard } from '../guards/cast.guard';
 import { isMovieCrewGuard } from '../guards/crew.guard';
@@ -17,12 +18,13 @@ import {
   tvDetailsMapper,
   movieMapper,
   personMapper,
+  ratingMovieTvMapper,
   searchMovieMapper,
   searchPersonMapper,
   searchTvMapper,
-  tvMapper
+  tvMapper,
+  movieTvListParamMapper,
 } from '../helpers';
-import { ratingMovieMapper } from '../helpers/rating-movie-tv.mapper';
 import {
   CastAndCrew,
   CastAndCrewResultDTO,
@@ -44,6 +46,7 @@ import {
   MovieRatingCard,
   MovieRatingValue,
   MovieShortCard,
+  MovieTvGenre,
   TvDTO
 } from '../interfaces/movies';
 import {
@@ -53,6 +56,7 @@ import {
 import {
   SearchCard,
   SearchCardDTO,
+  SearchParams,
   SearchPersonDTO
 } from '../interfaces/search';
 
@@ -69,7 +73,7 @@ const searchCardMapperFactory: { [key in MediaType]: (value: SearchCardDTO) => S
 export class ApiService {
   constructor(private http: HttpClient) {}
 
-  search$(params: string): Observable<SearchCard[]> {
+  public search$(params: string): Observable<SearchCard[]> {
     return this.http.get<{ results: SearchCardDTO[] }>(params).pipe(
       map((data: { results: SearchCardDTO[] }) => {
         return data.results
@@ -84,7 +88,15 @@ export class ApiService {
     );
   }
 
-  getMovieList$(params: string): Observable<MovieShortCard[]> {
+  public getDefaultMovieOrTvList$(mediaType: MediaType.Movie | MediaType.Tv, params: SearchParams, page: number = 1): Observable<MovieShortCard[]> {
+    const requestType = mediaType === MediaType.Movie ? ApiRequestType.MovieDiscover : ApiRequestType.TvDiscover;
+    const queryParams = movieTvListParamMapper(params, mediaType);
+    const finalQuery = requestType + queryParams + `&${page}`;
+
+    return mediaType === MediaType.Movie ? this.getMovieList$(finalQuery) : this.getTvList$(finalQuery);
+  }
+
+  public getMovieList$(params: string): Observable<MovieShortCard[]> {
     return this.http.get<{ results: MovieDTO[] }>(params).pipe(
       map((data: { results: MovieDTO[] }) => {
         return data.results.map((result: MovieDTO) => {
@@ -94,7 +106,7 @@ export class ApiService {
     );
   }
 
-  getTvList$(params: string): Observable<MovieShortCard[]> {
+  public getTvList$(params: string): Observable<MovieShortCard[]> {
     return this.http.get<{ results: TvDTO[] }>(params).pipe(
       map((data: { results: TvDTO[] }) => {
         return data.results.map((result: TvDTO) => {
@@ -104,7 +116,7 @@ export class ApiService {
     );
   }
 
-  getMovieDetails$(params: string): Observable<MovieDetails> {
+  public getMovieDetails$(params: string): Observable<MovieDetails> {
     return this.http.get<MovieDTO>(params).pipe(
       map((data: MovieDTO) => {
         return movieDetailsMapper(data);
@@ -112,7 +124,7 @@ export class ApiService {
     );
   }
 
-  getTvDetails$(params: string): Observable<MovieDetails> {
+  public getTvDetails$(params: string): Observable<MovieDetails> {
     return this.http.get<TvDTO>(params).pipe(
       map((data: TvDTO) => {
         return tvDetailsMapper(data);
@@ -120,7 +132,7 @@ export class ApiService {
     );
   }
 
-  getMovieOrTvCast$(params: string, options?: MovieDetailsOptions): Observable<CastAndCrew> {
+  public getMovieOrTvCast$(params: string, options?: MovieDetailsOptions): Observable<CastAndCrew> {
     return this.http.get<CastAndCrewResultDTO>(params).pipe(
       map((data: CastAndCrewResultDTO) => {
         let castArr = data.cast.map((castItem: MovieCastDTO | TvCastDTO) => {
@@ -145,13 +157,13 @@ export class ApiService {
     );
   }
 
-  getPersonDetails$(params: string): Observable<PersonDetails> {
+  public getPersonDetails$(params: string): Observable<PersonDetails> {
     return this.http.get<PersonDTO>(params).pipe(
       map(data => personMapper(data))
     );
   }
 
-  getPersonKnowsFor$(params: string, id: number): Observable<SearchCard[]> {
+  public getPersonKnowsFor$(params: string, id: number): Observable<SearchCard[]> {
     return this.http.get<{ results: SearchPersonDTO[] }>(params).pipe(
       map((data: { results: SearchPersonDTO[] }) => {
         return data.results.find((person: SearchPersonDTO) => person.id === id);
@@ -164,7 +176,7 @@ export class ApiService {
     );
   }
 
-  getPersonCast$(params: string): Observable<CastAndCrew> {
+  public getPersonCast$(params: string): Observable<CastAndCrew> {
     return this.http.get<CastAndCrewResultDTO>(params).pipe(
       map((data: CastAndCrewResultDTO) => ({
         cast: data.cast
@@ -184,35 +196,33 @@ export class ApiService {
     );
   }
 
-  getImageConfig$(params: string): Observable<ImageConfig> {
+  public getImageConfig$(params: string): Observable<ImageConfig> {
     return this.http.get<{ images: ImageConfig }>(params).pipe(map(data => data.images));
   }
 
-  getGuestSession$(params: string): Observable<GuestSession> {
+  public getGuestSession$(params: string): Observable<GuestSession> {
     return this.http.get<GuestSession>(params);
   }
 
-  getRatedMoviesList$(params: string): Observable<MovieRatingCard[]> {
+  public getRatedMoviesOrTvList$(params: string): Observable<MovieRatingCard[]> {
     return this.http.get<{ results: MovieDTO[] }>(params).pipe(
       map((data: { results: MovieDTO[] }) => {
         return data.results.map((result: MovieDTO) => {
-          return ratingMovieMapper(result);
+          return ratingMovieTvMapper(result);
         });
       }),
     );
   }
 
-  getRatedTvList$(params: string): Observable<MovieRatingCard[]> {
-    return this.http.get<{ results: MovieDTO[] }>(params).pipe(
-      map((data: { results: MovieDTO[] }) => {
-        return data.results.map((result: MovieDTO) => {
-          return ratingMovieMapper(result);
-        });
-      }),
-    );
-  }
-
-  rateMovieOrTv$(params: string, rating: MovieRatingValue): Observable<MovieRating> {
+  public rateMovieOrTv$(params: string, rating: MovieRatingValue): Observable<MovieRating> {
     return this.http.post<MovieRating>(params, rating);
+  }
+
+  public getMovieOrTvGenres$(mediaType: MediaType.Movie | MediaType.Tv): Observable<MovieTvGenre[]> {
+    const genresReq = mediaType === MediaType.Movie ? ApiRequestType.MovieGenres : ApiRequestType.TvGenres;
+
+    return this.http.get<{ genres: MovieTvGenre[] }>(genresReq).pipe(
+      map((value:{ genres: MovieTvGenre[] }) => value.genres)
+    );
   }
 }

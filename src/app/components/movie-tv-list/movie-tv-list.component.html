@@ -1,0 +1,73 @@
+<div class="container">
+    <div class="list">
+        <form class="list__sidebar" *ngIf="filterForm; else loading" [formGroup]="filterForm">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Sort</div>
+                <select formControlName="sort" class="select">
+                    <option value="" disabled hidden>Sort Results By</option>
+                    <option [value]="option.type" *ngFor="let option of sortType">
+                        {{ option.title }}
+                    </option>
+                </select>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">Genres</div>
+
+                <ng-container formArrayName="genres">
+                    <ng-container *ngFor="let genre of genres.controls; index as i" [formGroupName]="i">
+                        <input
+                            type="checkbox"
+                            class="sidebar-checkbox"
+                            [id]="'genre_' + genre.value.id"
+                            formControlName="checked">
+                        <label [for]="'genre_' + genre.value.id">{{ genre.value.name }}</label>
+                    </ng-container>
+                </ng-container>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">Filter by date</div>
+                <div class="date-range">
+                    <label for="from-date">from</label>
+                    <input
+                        type="date"
+                        class="sidebar-input"
+                        id="from-date"
+                        formControlName="dateFrom">
+                </div>
+
+                <div class="date-range">
+                    <label for="to-date">to</label>
+                    <input
+                        type="date"
+                        class="sidebar-input"
+                        id="to-date"
+                        formControlName="dateTo">
+                </div>
+            </div>
+
+            <button
+                type="button"
+                class="sidebar-button"
+                [disabled]="isSearchButtonDisabled"
+                (click)="search()">Search</button>
+        </form>
+
+        <div class="list__content" *ngIf="(movieOrTvList$ | async) as movieOrTvList">
+            <div class="grid">
+                <tmbd-movie-card
+                    *ngFor="let card of movieOrTvList"
+                    [card]="card"></tmbd-movie-card>
+            </div>
+
+            <div>
+                pagination
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #loading>
+    Loading ...
+</ng-template>

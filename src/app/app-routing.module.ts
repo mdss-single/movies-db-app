@@ -7,6 +7,14 @@ const routes: Routes = [
     loadComponent: () => import('./pages/entrance/entrance.component').then(mod => mod.EntranceComponent)
   },
   {
+    path: 'movies',
+    loadComponent: () => import('./pages/movie-list/movie-list.component').then(mod => mod.MovieListComponent)
+  },
+  {
+    path: 'tv',
+    loadComponent: () => import('./pages/tv-list/tv-list.component').then(mod => mod.TvListComponent)
+  },
+  {
     path: 'person/:id',
     loadComponent: () => import('./pages/person/person.component').then(mod => mod.PersonComponent)
   },
